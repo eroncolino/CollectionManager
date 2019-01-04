@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * @author Elena Roncolino
@@ -86,11 +88,18 @@ public class LoginPanel extends JPanel {
                         new SignUpPanel(), "Sign up", JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, options, null);
 
-                //If the user wants to sign up, then the correctness of the password and of th eusername
+                //If the user wants to sign up, then the correctness of the password and of th username
                 if (result == JOptionPane.YES_OPTION){
-                    boolean canAddUser = LogInCheck.checkDataCorrectness(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getConfirmedPassword());
+                    boolean canAddUser = LogInCheck.checkDataRequirements(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getConfirmedPassword());
                     if (canAddUser) {
-                        User.registerUser(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getImageFile());
+                        User user = new User(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getImageFile());
+                        try {
+                            DatabaseConnection.getInstance().addUser(user);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
             }
@@ -152,12 +161,11 @@ public class LoginPanel extends JPanel {
 
         /**
          * Method that overrides the default one and calls another method to check if the inserted username and password are correct.
-         *
          * @param e The event that occurs.
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogInCheck.checkUserExists(usernameField.getText(), new String(passwordField.getPassword()));
+            LogInCheck.checkCredentials(usernameField.getText(), new String(passwordField.getPassword()));
         }
     }
 }

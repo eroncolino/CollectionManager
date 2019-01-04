@@ -2,22 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
- * @author Elena Roncolino
- *
  * Main class that allows the execution of the application.
+ * @author Elena Roncolino
  */
-
 public class Main {
 
     /**
      * Main method that creates the frame of the application,
      * the menu bar and the background panel.
-     *
-     * @param args parameters
+     * @param args parameters.
      */
-
     public static void main(String[] args) {
 
         JFrame frame;
@@ -54,7 +51,7 @@ public class Main {
         exit = new JMenuItem("Exit", exitImage);
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                DatabaseConnection.closeConnection();
+                DatabaseConnection.getInstance().closeConnection();
                 System.exit(0);
             }
         });
@@ -63,6 +60,13 @@ public class Main {
         menu.add(exit);
 
         menuBar.add(menu);
+
+        try {
+            DatabaseConnection.getInstance().initialize("CarDB.db");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //Add the menu bar to the frame and set defaults
         frame.setJMenuBar(menuBar);

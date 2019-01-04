@@ -23,8 +23,10 @@ import java.io.*;
 public class SignUpPanel extends JPanel{
     private JFXPanel jfxPanel;
     private Circle circle;
-    private static JTextField usernameField, passwordField, confirmField;
+    private static JTextField usernameField;
+    private static JPasswordField passwordField, confirmField;
     private static File chosenFile;
+    private static Image image;
 
     /**
      * Constructor of the sign up panel.
@@ -60,7 +62,7 @@ public class SignUpPanel extends JPanel{
         JLabel password = new JLabel("Choose a password:");
         Properties.setColor(password);
         password.setFont(new Font("Arial", Font.PLAIN, 20));
-        passwordField = new JTextField();
+        passwordField = new JPasswordField();
 
         passwordPanel.setLayout(new BoxLayout(passwordPanel, BoxLayout.X_AXIS));
         passwordPanel.add(Box.createRigidArea(new Dimension(20,0)));
@@ -75,7 +77,7 @@ public class SignUpPanel extends JPanel{
         JLabel confirm = new JLabel("Confirm password:");
         Properties.setColor(confirm);
         confirm.setFont(new Font("Arial", Font.PLAIN, 20));
-        confirmField = new JTextField();
+        confirmField = new JPasswordField();
 
         confirmPanel.setLayout(new BoxLayout(confirmPanel, BoxLayout.X_AXIS));
         confirmPanel.add(Box.createRigidArea(new Dimension(20,0)));
@@ -143,12 +145,12 @@ public class SignUpPanel extends JPanel{
      * Private class that implements the listener for the search profile image button.
      */
     private class imageChooserListener implements ActionListener {
-        @Override
         /**
          * Method that overrides the default one and displays the chosen profile image
          *
          * @param e The event that occurs.
          */
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             JFileChooser fileChooser = new JFileChooser();
@@ -160,11 +162,11 @@ public class SignUpPanel extends JPanel{
                 chosenFile = fileChooser.getSelectedFile();
 
                 if (chosenFile.length() < 524288000){
-                    Image profileImage = new Image(chosenFile.toURI().toString());
-                    circle.setFill(new ImagePattern(profileImage, 0, 0, 1, 1, true));
+                    image = new Image(chosenFile.toURI().toString());
+                    circle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
                 }
                 else {
-                    throw new ImageSizeException("The profile image cannot be larger than 5 MB!");
+                    throw new ImageTooLargeException("The profile image cannot be larger than 5 MB!");
                 }
             }
         }
@@ -183,7 +185,7 @@ public class SignUpPanel extends JPanel{
      * @return String The entered password
      */
     public static String getPassword(){
-        return passwordField.getText();
+        return new String(passwordField.getPassword());
     }
 
     /**
@@ -191,14 +193,14 @@ public class SignUpPanel extends JPanel{
      * @return String The entered confirmed password
      */
     public static String getConfirmedPassword(){
-        return confirmField.getText();
+        return new String(confirmField.getPassword());
     }
 
     /**
      * Getter for the inputStream of the chosen image.
      * @return InputStream The inputStream that will be used to store the selected image in the database.
      */
-    public static File getImageFile(){
-        return chosenFile;
+    public static Image getImageFile(){
+        return image;
     }
 }

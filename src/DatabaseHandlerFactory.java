@@ -15,6 +15,5 @@ public class DatabaseHandlerFactory {
             return new SQLiteHandler();
 
         return null;
-
     }
 }

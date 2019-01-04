@@ -1,7 +1,5 @@
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +9,6 @@ import java.util.regex.Pattern;
  * @author Elena Roncolino
  */
 public class LogInCheck {
-    private static Connection connection = DatabaseConnection.getInstance();
 
     /**
      * Method that checks if the username has less than 5 characters and if it contains more than one dash, underscore or period.
@@ -20,8 +17,7 @@ public class LogInCheck {
      * @param confirm The confirm password entered.
      * @return <code>true</code> if the method that it calls returns <code>true</code>, whiche means that all entered data is correct.
      */
-    public static boolean checkDataCorrectness(String username, String password, String confirm) {
-        System.out.println(confirm);
+    public static boolean checkDataRequirements(String username, String password, String confirm) {
 
         //Check username length
         if (username.length() < 5 || username.length() > 30) {
@@ -38,7 +34,6 @@ public class LogInCheck {
                 JOptionPane.showMessageDialog(null, "The username can only contain one dash, one underscore or one dot!", "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-
             else {
                 return checkAlreadyUsedUsername(username, password, confirm);
             }
@@ -47,35 +42,20 @@ public class LogInCheck {
 
     /**
      * Method that checks if the username entered already exists in the database.
-     *
      * @param username The username entered.
      * @param password The password entered.
      * @param confirm The confirm password entered.
      * @return <code>true</code> if the method that it calls returns <code>true</code>.
      */
     private static boolean checkAlreadyUsedUsername (String username, String password, String confirm){
-        String query = "SELECT * FROM user WHERE username = ?";
-
-        PreparedStatement s;
-
         try {
-            s = connection.prepareStatement(query);
-            s.setString(1, username);
-
-            ResultSet rs = s.executeQuery();
-
-            if(rs.next()){
-                String message = "This username already exists in the database. If you are already registered, " +
-                        "please log in. If you are a new user, please choose a different username!";
-                JOptionPane.showMessageDialog(null, message, "Warning", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
+            if (DatabaseConnection.getInstance().usernameAlreadyExists(username))
+                return checkPasswordRequirements(password, confirm);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return checkPasswordRequirements(password, confirm);
+        return false;
     }
 
     /**
@@ -110,7 +90,12 @@ public class LogInCheck {
         }
     }
 
-    public static void checkUserExists(String username, String password) {
+    /**
+     * Method that checks if the entered credentials are correct and retrieves the right user.
+     * @param username The entered username.
+     * @param password The entered password.
+     */
+    public static void checkCredentials(String username, String password) {
         if (username.length() < 5 || username.length() > 30) {
             JOptionPane.showMessageDialog(null, "The username must be between 5 and 30 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -119,28 +104,16 @@ public class LogInCheck {
                 JOptionPane.showMessageDialog(null, "The password must be at least 5 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
             }
             else {
-                String checkData = "SELECT * FROM user WHERE username = ? AND password = ?";
                 try {
-                    PreparedStatement s = connection.prepareStatement(checkData);
-                    s.setString(1, username);
-                    HasherFactory hasherFactory = new HasherFactory();
-                    String hashedPassword = hasherFactory.getHasher("MD5").getSecurePassword(password);
-                    s.setString(2, hashedPassword);
-
-                    ResultSet rs = s.executeQuery();
-
-                    if (rs.next()){
-                        String message = "Welcome back " + username + "! Your data will be loaded.";
-                        JOptionPane.showMessageDialog(null, message, "Successful login", JOptionPane.PLAIN_MESSAGE);
-
-
-                    }
+                    User user = DatabaseConnection.getInstance().getUser(username, password);
+                    String message = "Welcome back " + username + "! Your data will be loaded.";
+                    JOptionPane.showMessageDialog(null, message, "Successful login", JOptionPane.PLAIN_MESSAGE);
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
             }
         }
     }
-
 }
