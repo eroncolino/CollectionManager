@@ -16,8 +16,8 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 /**
- * @author Elena Roncolino
  * Class that will be shown inside the JOptionPane and that allows the user to sign up by choosing a username, a password and an optional profile image.
+ * @author Elena Roncolino
  */
 
 public class SignUpPanel extends JPanel{

@@ -1,7 +1,5 @@
 import javafx.scene.image.Image;
 
-import java.io.File;
-
 /**
  * Class that represents a user.
  * @author Elena Roncolino

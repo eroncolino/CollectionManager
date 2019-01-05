@@ -1,7 +1,5 @@
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import jdk.internal.util.xml.impl.Input;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -9,7 +7,8 @@ import java.io.*;
 import java.sql.*;
 
 /**
- * @// TODO: 1/4/2019  
+ * Class that provides methods to interact with the database.
+ * @author Elena Roncolino
  */
 public class SQLiteHandler implements DatabaseHandler {
     private Connection sqliteConnection;
@@ -73,6 +72,10 @@ public class SQLiteHandler implements DatabaseHandler {
         }
     }
 
+    /**
+     * Method that returns where all the data is stored, i.e., the database name.
+     * @return String The name of the database.
+     */
     @Override
     public String getDatabaseName() {
         return databaseName;
@@ -159,6 +162,12 @@ public class SQLiteHandler implements DatabaseHandler {
 
     }
 
+    /**
+     * Method that checks if the credentials are stored in the database and returns the current User Object.
+     * @param username The username.
+     * @param password The password.
+     * @return User The user corresponding to the username and password entered.
+     */
     @Override
     public User getUser(String username, String password) throws UserNotFoundException {
         User user = null;
@@ -197,11 +206,11 @@ public class SQLiteHandler implements DatabaseHandler {
 
     @Override
     public void insertCar(Car car) {
-
+        //todo insert car method
     }
 
     @Override
     public void deleteCar(Car car) {
-
+        //todo delete car method
     }
 }
