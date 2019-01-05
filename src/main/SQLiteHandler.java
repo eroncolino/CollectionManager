@@ -1,5 +1,9 @@
+package main;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import main.exceptions.UserNotFoundException;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -163,10 +167,10 @@ public class SQLiteHandler implements DatabaseHandler {
     }
 
     /**
-     * Method that checks if the credentials are stored in the database and returns the current User Object.
+     * Method that checks if the credentials are stored in the database and returns the current main.User Object.
      * @param username The username.
      * @param password The password.
-     * @return User The user corresponding to the username and password entered.
+     * @return main.User The user corresponding to the username and password entered.
      */
     @Override
     public User getUser(String username, String password) throws UserNotFoundException {

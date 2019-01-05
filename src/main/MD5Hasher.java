@@ -1,3 +1,5 @@
+package main;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -17,7 +19,7 @@ public class MD5Hasher implements Hasher{
      *
      * @author Lokesh Gupta
      * @see <a href="http://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/">
-     *     Generate Secure Password MD5Hasher : MD5, SHA, PBKDF2, BCrypt Examples</a>
+     *     Generate Secure Password main.MD5Hasher : MD5, SHA, PBKDF2, BCrypt Examples</a>
      * @param passwordToHash The password to be ashed.
      * @return String The hashed password.
      */

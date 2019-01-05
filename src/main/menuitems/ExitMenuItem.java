@@ -1,3 +1,5 @@
+package main.menuitems;
+import main.DatabaseConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,28 +10,21 @@ import java.awt.event.ActionListener;
  * @author Elena Roncolino
  */
 public class ExitMenuItem extends JMenuItem {
-    private ImageIcon exitImage;
-    private static JMenuItem exitMenu;
 
     /**
-     *
+     * Method that builds the exit menu item.
+     * @return JMenuItem The exit menu item.
      */
-    public ExitMenuItem() {
-        exitImage = new ImageIcon(new ImageIcon("images/exit.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        exitMenu = new JMenuItem("Exit", exitImage);
+    public JMenuItem buildExitMenuItem() {
+        ImageIcon exitImage = new ImageIcon(new ImageIcon("images/exit.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        JMenuItem exitMenu = new JMenuItem("Exit", exitImage);
         exitMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DatabaseConnection.getInstance().closeConnection();
                 System.exit(0);
             }
         });
-    }
 
-    /**
-     *
-     * @return
-     */
-    public static JMenuItem getExitMenuItem(){
         return exitMenu;
     }
 }

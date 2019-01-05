@@ -1,3 +1,5 @@
+package main.menuitems;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,9 +14,10 @@ public class AboutMenuItem extends JMenuItem {
     private static JMenuItem aboutMenu;
 
     /**
-     *
+     * Method that builds the about menu item.
+     * @return JMenuItem The about menu item.
      */
-    public AboutMenuItem() {
+    public JMenuItem buildAboutMenuItem() {
         aboutImage = new ImageIcon(new ImageIcon("images/about.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         aboutMenu = new JMenuItem("About", aboutImage);
         String aboutMessage = "This application has been developed by a second year Computer Science and Engineering student\n" +
@@ -25,13 +28,8 @@ public class AboutMenuItem extends JMenuItem {
                 JOptionPane.showMessageDialog(null, aboutMessage);
             }
         });
-    }
 
-    /**
-     *
-     * @return
-     */
-    public static JMenuItem getExitMenuItem(){
         return aboutMenu;
     }
+
 }

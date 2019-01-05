@@ -1,3 +1,5 @@
+package main;
+
 import javafx.scene.image.Image;
 
 /**
@@ -9,7 +11,7 @@ public class User {
     Image image;
 
     /**
-     * User constructor.
+     * main.User constructor.
      * @param username The username chosen.
      * @param password The password chosen.
      * @param image The chosen profile image.
@@ -18,6 +20,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.image = image;
+    }
+
+    /**
+     * Username getter.
+     * @return String The username.
+     */
+    public static String getUsername(){
+        return getUsername();
     }
 
 }

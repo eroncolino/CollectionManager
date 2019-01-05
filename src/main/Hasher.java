@@ -1,3 +1,5 @@
+package main;
+
 /**
 * Interface to hast strings. The implementation of this interface will provide
  * a method to hash passwords so that they can be store safely in the database.

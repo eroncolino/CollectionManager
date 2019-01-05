@@ -1,17 +1,17 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 /**
- * Main class that allows the execution of the application.
+ * main.Main class that allows the execution of the application.
  * @author Elena Roncolino
  */
 public class Main {
 
     /**
-     * Main method that creates the frame of the application,
+     * main.Main method that creates the frame of the application,
      * the menu bar and the background panel.
      * @param args parameters.
      */
@@ -34,7 +34,7 @@ public class Main {
 
         //Add the menu bar to the frame and set defaults
         MenuBarBuilder menuBarBuilder = new MenuBarBuilder();
-        JMenuBar menuBar = menuBarBuilder.buildMenuBar();
+        JMenuBar menuBar = menuBarBuilder.buildPlainMenuBar();
         frame.setJMenuBar(menuBar);
 
         frame.add(new BackgroundPanel());

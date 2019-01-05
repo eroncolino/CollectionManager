@@ -1,3 +1,7 @@
+package main;
+
+import main.exceptions.UserNotFoundException;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -51,10 +55,10 @@ public interface DatabaseHandler {
     void deleteUser(User user);
 
     /**
-     * Method that checks if the credentials are stored in the database and returns the current User Object.
+     * Method that checks if the credentials are stored in the database and returns the current main.User Object.
      * @param username The username.
      * @param password The password.
-     * @return User The user corresponding to the username and password entered.
+     * @return main.User The user corresponding to the username and password entered.
      * @throws SQLException If there is a problem in the JDBC.
      * @throws IOException If there is a problem with the image input stream.
      * @throws UserNotFoundException If the user is not registered in the database.

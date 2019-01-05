@@ -1,3 +1,5 @@
+package main;
+
 /**
  * This is a singleton class that allows to create
  * one and only one connection to the SQLite database.
@@ -13,7 +15,7 @@ public class DatabaseConnection {
 
     /**
      *  Getter that provides a global access to get the instance of the connection.
-     * @return DatabaseConnection
+     * @return main.DatabaseConnection
      */
     public static DatabaseHandler getInstance(){
         return databaseInstance;
