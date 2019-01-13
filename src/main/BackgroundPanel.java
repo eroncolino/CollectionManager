@@ -24,17 +24,11 @@ public class BackgroundPanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        LoginPanel loginPanel = new LoginPanel();
-        loginPanel.setOpaque(false);
-        add(loginPanel);
     }
 
     /**
      * Method that paints the background image.
-     *
      * @param g Graphic context.
-     *
      */
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -42,3 +36,5 @@ public class BackgroundPanel extends JPanel {
             g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }
+
+

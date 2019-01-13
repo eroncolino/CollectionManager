@@ -8,13 +8,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * @author Elena Roncolino
  * Class that sets up the panel where the user can enter the username and password
+ * @author Elena Roncolino
  */
-
 public class LoginPanel extends JPanel {
-    private JPanel mainPanel, firstRowPanel, secondRowPanel, thirdRowPanel, fourthRowPanel;
-    private JLabel mainLabel, usernameLabel, passwordLabel, newUserLabel, signUpLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton enterButton;
@@ -22,28 +19,27 @@ public class LoginPanel extends JPanel {
     /**
      * Constructor of the login panel.
      */
-
     public LoginPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
 
         //Create title panel and its components
-        mainLabel = new JLabel("CAR COLLECTION MANAGER");
+        JLabel mainLabel = new JLabel("CAR COLLECTION MANAGER");
         mainLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        Properties.setColor(mainLabel);
+        mainLabel.setForeground(new Color(14, 35, 46));
 
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setOpaque(false);
         mainPanel.add(mainLabel);
 
         //Create the panel that hosts the username label and its text field
-        firstRowPanel = new JPanel();
+        JPanel firstRowPanel = new JPanel();
         firstRowPanel.setOpaque(false);
         firstRowPanel.setLayout(new BoxLayout(firstRowPanel, BoxLayout.X_AXIS));
 
-        usernameLabel = new JLabel("Username:");
-        Properties.setColor(usernameLabel);
-        Properties.setFont(usernameLabel);
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(new Color(14, 35, 46));
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 28));
 
         usernameField = new JTextField();
         usernameField.setMaximumSize(new Dimension(250, 30));
@@ -53,13 +49,13 @@ public class LoginPanel extends JPanel {
         firstRowPanel.add(usernameField);
 
         //Create the panel that hosts the password label and its text field
-        secondRowPanel = new JPanel();
+        JPanel secondRowPanel = new JPanel();
         secondRowPanel.setOpaque(false);
         secondRowPanel.setLayout(new BoxLayout(secondRowPanel, BoxLayout.X_AXIS));
 
-        passwordLabel = new JLabel("Password:");
-        Properties.setColor(passwordLabel);
-        Properties.setFont(passwordLabel);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(new Color(14, 35, 46));
+        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 28));
 
         passwordField = new JPasswordField();
         passwordField.setMaximumSize(new Dimension(250, 30));
@@ -69,16 +65,16 @@ public class LoginPanel extends JPanel {
         secondRowPanel.add(passwordField);
 
         //Create the panel that hosts the new user sign up option
-        thirdRowPanel = new JPanel();
+        JPanel thirdRowPanel = new JPanel();
         thirdRowPanel.setOpaque(false);
         thirdRowPanel.setLayout(new BoxLayout(thirdRowPanel, BoxLayout.X_AXIS));
 
-        newUserLabel = new JLabel("Are you a new user? ");
-        Properties.setColor(newUserLabel);
+        JLabel newUserLabel = new JLabel("Are you a new user? ");
+        newUserLabel.setForeground(new Color(14, 35, 46));
         newUserLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
-        signUpLabel = new JLabel("Sign up!");
-        Properties.setColor(signUpLabel);
+        JLabel signUpLabel = new JLabel("Sign up!");
+        signUpLabel.setForeground(new Color(14, 35, 46));
         signUpLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         signUpLabel.addMouseListener(new MouseAdapter() {
@@ -94,9 +90,8 @@ public class LoginPanel extends JPanel {
                 if (result == JOptionPane.YES_OPTION){
                     boolean canAddUser = LogInCheck.checkDataRequirements(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getConfirmedPassword());
                     if (canAddUser) {
-                        User user = new User(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getImageFile());
                         try {
-                            DatabaseConnection.getInstance().addUser(user);
+                            DatabaseConnection.getInstance().addUser(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getImageFile());
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         } catch (SQLException e1) {
@@ -111,7 +106,7 @@ public class LoginPanel extends JPanel {
         thirdRowPanel.add(signUpLabel);
 
         //Create the panel that hosts the enter button
-        fourthRowPanel = new JPanel();
+        JPanel fourthRowPanel = new JPanel();
         fourthRowPanel.setOpaque(false);
 
         enterButton = new JButton("Enter");

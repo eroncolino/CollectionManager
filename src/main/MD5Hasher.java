@@ -4,12 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * This class is used to encrypte the user's password
- * using MD5 algorithm.
- *
+ * This class is used to encrypt the user's password using MD5 algorithm.
  * @author  Elena Roncolino
  */
-
 public class MD5Hasher implements Hasher{
 
     /**
@@ -23,7 +20,6 @@ public class MD5Hasher implements Hasher{
      * @param passwordToHash The password to be ashed.
      * @return String The hashed password.
      */
-
     public String getSecurePassword(String passwordToHash)
     {
         String generatedPassword = null;

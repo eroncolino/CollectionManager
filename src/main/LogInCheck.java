@@ -110,6 +110,7 @@ public class LogInCheck {
                     User user = DatabaseConnection.getInstance().getUser(username, password);
                     String message = "Welcome back " + username + "! Your data will be loaded.";
                     JOptionPane.showMessageDialog(null, message, "Successful login", JOptionPane.PLAIN_MESSAGE);
+                    Main.showCarPanel();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

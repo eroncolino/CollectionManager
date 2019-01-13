@@ -10,18 +10,16 @@ import java.awt.event.ActionListener;
  * @author Elena Roncolino
  */
 public class AboutMenuItem extends JMenuItem {
-    private ImageIcon aboutImage;
-    private static JMenuItem aboutMenu;
 
     /**
      * Method that builds the about menu item.
      * @return JMenuItem The about menu item.
      */
     public JMenuItem buildAboutMenuItem() {
-        aboutImage = new ImageIcon(new ImageIcon("images/about.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        aboutMenu = new JMenuItem("About", aboutImage);
+        ImageIcon aboutImage = new ImageIcon(new ImageIcon("images/about.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        JMenuItem aboutMenu = new JMenuItem("About", aboutImage);
         String aboutMessage = "This application has been developed by a second year Computer Science and Engineering student\n" +
-                " of the Free University of Bolzano as a project for the Advanced Programming course.";
+                " of the Free University of Bolzano as a project for the Advanced Programming course.\nThe icons are takes from the website: https://www.flaticon.com/.";
         aboutMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

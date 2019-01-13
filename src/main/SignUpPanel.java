@@ -23,13 +23,11 @@ import java.io.*;
  * Class that will be shown inside the JOptionPane and that allows the user to sign up by choosing a username, a password and an optional profile image.
  * @author Elena Roncolino
  */
-
 public class SignUpPanel extends JPanel{
     private JFXPanel jfxPanel;
     private Circle circle;
     private static JTextField usernameField;
     private static JPasswordField passwordField, confirmField;
-    private static File chosenFile;
     private static Image image;
 
     /**
@@ -49,7 +47,7 @@ public class SignUpPanel extends JPanel{
         JPanel usernamePanel = new JPanel();
 
         JLabel username = new JLabel("Choose a username:");
-        Properties.setColor(username);
+        username.setForeground(new java.awt.Color(14, 35, 46));
         username.setFont(new Font("Arial", Font.PLAIN, 20));
         usernameField = new JTextField();
 
@@ -64,7 +62,7 @@ public class SignUpPanel extends JPanel{
         JPanel passwordPanel = new JPanel();
 
         JLabel password = new JLabel("Choose a password:");
-        Properties.setColor(password);
+        password.setForeground(new java.awt.Color(14, 35, 46));
         password.setFont(new Font("Arial", Font.PLAIN, 20));
         passwordField = new JPasswordField();
 
@@ -79,7 +77,7 @@ public class SignUpPanel extends JPanel{
         JPanel confirmPanel = new JPanel();
 
         JLabel confirm = new JLabel("Confirm password:");
-        Properties.setColor(confirm);
+        confirm.setForeground(new java.awt.Color(14, 35, 46));
         confirm.setFont(new Font("Arial", Font.PLAIN, 20));
         confirmField = new JPasswordField();
 
@@ -149,21 +147,22 @@ public class SignUpPanel extends JPanel{
      * Private class that implements the listener for the search profile image button.
      */
     private class imageChooserListener implements ActionListener {
+
         /**
          * Method that overrides the default one and displays the chosen profile image
-         *
          * @param e The event that occurs.
          */
         @Override
         public void actionPerformed(ActionEvent e) {
 
             JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+            FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Images", ImageIO.getReaderFileSuffixes());
             fileChooser.setFileFilter(imageFilter);
+            fileChooser.setAcceptAllFileFilterUsed(false);
             int returnValue = fileChooser.showOpenDialog(new JPanel());
 
             if(returnValue == JFileChooser.APPROVE_OPTION){
-                chosenFile = fileChooser.getSelectedFile();
+                File chosenFile = fileChooser.getSelectedFile();
 
                 if (chosenFile.length() < 524288000){
                     image = new Image(chosenFile.toURI().toString());

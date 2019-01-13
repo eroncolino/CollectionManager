@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that provides methods to interact with the database.
@@ -43,7 +45,7 @@ public class SQLiteHandler implements DatabaseHandler {
             String query2 = "CREATE TABLE IF NOT EXISTS cars (\n" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                     "name VARCHAR(50) NOT NULL,\n" +
-                    "brand VARCHAR(50) NOt NULL,\n" +
+                    "brand VARCHAR(50) NOT NULL,\n" +
                     "cubiccapacity INTEGER,\n" +
                     "ps INTEGER,\n" +
                     "kw INTEGER,\n" +
@@ -113,37 +115,39 @@ public class SQLiteHandler implements DatabaseHandler {
 
     /**
      * Method that adds a new user to the database.
-     * @param user The user that has to be added to the database.
+     * @param username The chosen username.
+     * @param password The chosen password.
+     * @param image The chosen image.
      */
     @Override
-    public void addUser(User user) {
+    public void addUser(String username, String password, Image image) {
         PreparedStatement s;
         String query;
 
         HasherFactory hasherFactory = new HasherFactory();
-        String hashedPassword = hasherFactory.getHasher("MD5").getSecurePassword(user.password);
+        String hashedPassword = hasherFactory.getHasher("MD5").getSecurePassword(password);
 
         try {
-            if (user.image != null) {    //If the user has chosen an image, store it
+            if (image != null) {    //If the user has chosen an image, store it
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(user.image, null);
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
                 if(bufferedImage != null)
                     ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
                 byte[] imageBytes = byteArrayOutputStream.toByteArray();
 
                 query = "INSERT INTO users (username, password, image) VALUES (?,?,?)";
                 s = sqliteConnection.prepareStatement(query);
-                s.setString(1, user.username);
+                s.setString(1, username);
                 s.setString(2, hashedPassword);
                 s.setBytes(3, imageBytes);
             }
 
             else {    //The user has not chosen any image
 
-                query = "INSERT INTO user (username, password) VALUES (?,?)";
+                query = "INSERT INTO users (username, password) VALUES (?,?)";
                 s = sqliteConnection.prepareStatement(query);
-                s.setString(1, user.username);
+                s.setString(1, username);
                 s.setString(2, hashedPassword);
             }
 
@@ -188,13 +192,14 @@ public class SQLiteHandler implements DatabaseHandler {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()){
+                int userId = rs.getInt("id");
                 byte[] imageBytes = rs.getBytes("image");
                 Image image = null;
                 if (imageBytes != null && imageBytes.length > 1) {
                     InputStream imageStream = rs.getBinaryStream("image");
                     image = SwingFXUtils.toFXImage(ImageIO.read(imageStream), null);
                 }
-                user = new User(username, password, image);
+                user = new User(userId, username, password, image);
             }
             else {
                 String message = "Wrong username or password! If you are a new user, please sign up; otherwise check your credentials.";
@@ -208,9 +213,214 @@ public class SQLiteHandler implements DatabaseHandler {
         return user;
     }
 
+    /**
+     * Method that allows to retrieve all the cars that a user has stored in his collection manager.
+     * @param userId The id of the user.
+     * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    @Override
+    public Object[][] getCarsByUserId(int userId) {
+        ArrayList<Car> carsList = new ArrayList();
+
+        String query = "SELECT * FROM cars WHERE userid = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setInt(1, userId);
+            ResultSet rs = s.executeQuery();
+
+            while(rs.next()){
+                Car car = new Car(rs.getString("name"), rs.getString("brand"),
+                        rs.getInt("cubiccapacity"), rs.getInt("ps"), rs.getInt("kw"),
+                        rs.getInt("cylinders"), rs.getString("fueltype"), userId);
+
+                car.setCarId(rs.getInt("id"));
+                carsList.add(car);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Object[][] carsArray = new Object[carsList.size()][8];
+
+        for(int i = 0; i < carsList.size(); i++){
+            Car car = carsList.get(i);
+            carsArray[i][0] = car.getCarId();
+            carsArray[i][1] = car.getCarName();
+            carsArray[i][2] = car.getCarBrand();
+            carsArray[i][3] = car.getCubicCapacity();
+            carsArray[i][4] = car.getPs();
+            carsArray[i][5] = car.getKw();
+            carsArray[i][6] = car.getCylinders();
+            carsArray[i][7] = car.getFuelType();
+        }
+        return carsArray;
+    }
+
+    /**
+     * Method that allows to retrieve all the cars with the given string value in the specified column.
+     * @param userId The user id.
+     * @param column The column name where the string has to be matched.
+     * @param string The string to be matched.
+     * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    @Override
+    public Object[][] getCarsByString(int userId, String column, String string) throws SQLException {
+        ArrayList<Car> carsList = new ArrayList();
+
+        String query = "SELECT * FROM cars WHERE userId = ? AND UPPER(" + column + ") = UPPER(?)";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setInt(1, userId);
+            s.setString(2, string);
+            ResultSet rs = s.executeQuery();
+
+            while(rs.next()){
+                Car car = new Car(rs.getString("name"), rs.getString("brand"),
+                        rs.getInt("cubiccapacity"), rs.getInt("ps"), rs.getInt("kw"),
+                        rs.getInt("cylinders"), rs.getString("fueltype"), userId);
+
+                car.setCarId(rs.getInt("id"));
+                carsList.add(car);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Object[][] carsArray = new Object[carsList.size()][8];
+
+        for(int i = 0; i < carsList.size(); i++){
+            Car car = carsList.get(i);
+            carsArray[i][0] = car.getCarId();
+            carsArray[i][1] = car.getCarName();
+            carsArray[i][2] = car.getCarBrand();
+            carsArray[i][3] = car.getCubicCapacity();
+            carsArray[i][4] = car.getPs();
+            carsArray[i][5] = car.getKw();
+            carsArray[i][6] = car.getCylinders();
+            carsArray[i][7] = car.getFuelType();
+        }
+        return carsArray;
+    }
+
+    /**
+     * Method that allows to retrieve all the cars with the given number in the specified column.
+     * @param userId The user id.
+     * @param column The column name where the number has to be matched.
+     * @param number The number to be matched.
+     * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    @Override
+    public Object[][] getCarsByInt(int userId, String column, int number) throws SQLException {
+        ArrayList<Car> carsList = new ArrayList();
+
+        String query = "SELECT * FROM cars WHERE userId = ? AND " + column + " = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setInt(1, userId);
+            s.setInt(2, number);
+            ResultSet rs = s.executeQuery();
+
+            while(rs.next()){
+                Car car = new Car(rs.getString("name"), rs.getString("brand"),
+                        rs.getInt("cubiccapacity"), rs.getInt("ps"), rs.getInt("kw"),
+                        rs.getInt("cylinders"), rs.getString("fueltype"), userId);
+
+                car.setCarId(rs.getInt("id"));
+                carsList.add(car);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Object[][] carsArray = new Object[carsList.size()][8];
+
+        for(int i = 0; i < carsList.size(); i++){
+            Car car = carsList.get(i);
+            carsArray[i][0] = car.getCarId();
+            carsArray[i][1] = car.getCarName();
+            carsArray[i][2] = car.getCarBrand();
+            carsArray[i][3] = car.getCubicCapacity();
+            carsArray[i][4] = car.getPs();
+            carsArray[i][5] = car.getKw();
+            carsArray[i][6] = car.getCylinders();
+            carsArray[i][7] = car.getFuelType();
+        }
+        return carsArray;
+    }
+
+    /**
+     * Method that inserts a car record into the database.
+     * @param car The car record that has to be inserted.
+     */
     @Override
     public void insertCar(Car car) {
-        //todo insert car method
+        String query = "INSERT INTO cars VALUES(null,?,?,?,?,?,?,?,?)";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setString(1, car.getCarName());
+            s.setString(2, car.getCarBrand());
+            s.setInt(3, car.getCubicCapacity());
+            s.setInt(4, car.getPs());
+            s.setInt(5, car.getKw());
+            s.setInt(6, car.getCylinders());
+            s.setString(7, car.getFuelType());
+            s.setInt(8, car.getCarOwnerId());
+
+            int result = s.executeUpdate();
+
+            if (result > 0){
+                JOptionPane.showMessageDialog(null, "Car added successfully!", "Insertion complete", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+     }
+
+    /**
+     * Method that inserts a car list into the database.
+     * @param cars The list of cars to be inserted.
+     */
+    @Override
+    public void insertCarList(List<Car> cars) {
+        String query = "INSERT INTO cars VALUES(null,?,?,?,?,?,?,?,?)";
+
+        for(Car car : cars) {
+            try {
+                PreparedStatement s = sqliteConnection.prepareStatement(query);
+                s.setString(1, car.getCarName());
+                s.setString(2, car.getCarBrand());
+                s.setInt(3, car.getCubicCapacity());
+                s.setInt(4, car.getPs());
+                s.setInt(5, car.getKw());
+                s.setInt(6, car.getCylinders());
+                s.setString(7, car.getFuelType());
+                s.setInt(8, car.getCarOwnerId());
+
+                s.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        //Refresh table
+        CarPanel.repaintTable(getCarsByUserId(User.getUserId()));
+        JOptionPane.showMessageDialog(null, cars.size() + " cars added successfully!", "Insertion complete", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    @Override
+    public void updateCar(int carId){
+        //todo
     }
 
     @Override
