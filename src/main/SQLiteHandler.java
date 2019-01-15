@@ -155,7 +155,7 @@ public class SQLiteHandler implements DatabaseHandler {
 
             if (res > 0){
                 String message = "Successful registration!\nPlease sign in with the username and password you choose.";
-                JOptionPane.showMessageDialog(null, message, "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, message, "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (IOException e) {
@@ -165,8 +165,29 @@ public class SQLiteHandler implements DatabaseHandler {
         }
     }
 
+    /**
+     * Method that deletes a user from the database.
+     * @param userId The user to be deleted.
+     */
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(int userId) {
+        String query = "DELETE FROM users WHERE id = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+
+            s.setInt(1, userId);
+
+            int res = s.executeUpdate();
+
+            if (res > 0) {
+                Main.showLoginPanel();
+                JOptionPane.showMessageDialog(null, "Account deleted successfully!", "User deleted!", JOptionPane.PLAIN_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -406,25 +427,98 @@ public class SQLiteHandler implements DatabaseHandler {
                 s.setString(7, car.getFuelType());
                 s.setInt(8, car.getCarOwnerId());
 
-                s.executeUpdate();
+                int res = s.executeUpdate();
+
+                if (res > 0){
+                    //Refresh table
+                    CarPanel.repaintTable(getCarsByUserId(User.getUserId()));
+                    JOptionPane.showMessageDialog(null, cars.size() + " cars added successfully!", "Insertion complete", JOptionPane.INFORMATION_MESSAGE);
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        //Refresh table
-        CarPanel.repaintTable(getCarsByUserId(User.getUserId()));
-        JOptionPane.showMessageDialog(null, cars.size() + " cars added successfully!", "Insertion complete", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
+    /**
+     * Method that allows to update a car.
+     * @param carId The id of the car to be updated.
+     * @param name The new car name.
+     * @param brand The new car brand.
+     * @param cubicCapacity The new cubic capacity.
+     * @param ps The new PS value.
+     * @param kw The new KW value.
+     * @param cylinders The new cylinders value.
+     * @param fuel The new fuel type.
+     */
     @Override
-    public void updateCar(int carId){
-        //todo
+    public void updateCar(int carId, String name, String brand, int cubicCapacity, int ps, int kw, int cylinders, String fuel) {
+        String query = "UPDATE cars SET name = ?, brand = ?, cubiccapacity = ?, ps = ?, kw = ?, cylinders = ?, fueltype = ? " +
+                "WHERE id = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setString(1, name);
+            s.setString(2, brand);
+            s.setInt(3, cubicCapacity);
+            s.setInt(4, ps);
+            s.setInt(5, kw);
+            s.setInt(6, cylinders);
+            s.setString(7, fuel);
+            s.setInt(8, carId);
+
+            int res = s.executeUpdate();
+
+            if (res > 0) {
+                //Refresh table
+                CarPanel.repaintTable(getCarsByUserId(User.getUserId()));
+                JOptionPane.showMessageDialog(null, "Car record updated successfully!", "Update complete", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Method that deletes a car record from the database.
+     * @param carId The id of the car to be deleted.
+     */
     @Override
-    public void deleteCar(Car car) {
-        //todo delete car method
+    public void deleteCar(int carId) {
+        String query = "DELETE FROM cars WHERE id = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setInt(1, carId);
+
+            int res = s.executeUpdate();
+
+            if (res > 0) {
+                //Refresh table
+                CarPanel.repaintTable(getCarsByUserId(User.getUserId()));
+                JOptionPane.showMessageDialog(null, "Car record deleted successfully!", "Deletion complete", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method that deletes all the car records of a given user.
+     * @param userId The id of the user whose cars have to be deleted.
+     */
+    @Override
+    public void deleteCarsFromUserId(int userId) {
+        String query = "DELETE FROM cars WHERE userid = ?";
+
+        try {
+            PreparedStatement s = sqliteConnection.prepareStatement(query);
+            s.setInt(1, userId);
+
+            s.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

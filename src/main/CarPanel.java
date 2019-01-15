@@ -13,15 +13,12 @@ import java.sql.SQLException;
  * @author Elena Roncolino
  */
 public class CarPanel extends JPanel {
-    private JLabel searchLabel, stringLabel;
     static JComboBox columnsList;
     static JTextField textField;
-    private static JTable tab;
-    private JButton findButton, insertButton, deleteButton, updateButton, goBackButton;
-    private JPanel container;
-    private String[] boxColumns;
+    static JTable tab;
+    private JButton deleteButton;
+    private JButton updateButton;
     private static String[] tableColumns;
-
 
     /**
      * Car panel constructor.
@@ -29,7 +26,7 @@ public class CarPanel extends JPanel {
     public CarPanel() {
 
         // Create the container panel
-        container = new JPanel();
+        JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setOpaque(false);
 
@@ -48,10 +45,10 @@ public class CarPanel extends JPanel {
         JPanel criteria = new JPanel();
         criteria.setOpaque(false);
         criteria.setLayout(new BoxLayout(criteria, BoxLayout.X_AXIS));
-        searchLabel = new JLabel("Search by: ");
+        JLabel searchLabel = new JLabel("Search by: ");
         searchLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         searchLabel.setForeground(new Color(14, 35, 46));
-        boxColumns = new String[]{"Show all", "Name", "Brand", "Cubic capacity", "PS", "KW", "Cylinders", "Fuel type"};
+        String[] boxColumns = new String[]{"Show all", "Name", "Brand", "Cubic capacity", "PS", "KW", "Cylinders", "Fuel type"};
         tableColumns = new String[]{"ID", "Name", "Brand", "Cubic capacity", "PS", "KW", "Cylinders", "Fuel type"};
         columnsList = new JComboBox(boxColumns);
         columnsList.setPreferredSize(new Dimension(200, 20));
@@ -66,7 +63,7 @@ public class CarPanel extends JPanel {
         JPanel parameterPanel = new JPanel();
         parameterPanel.setOpaque(false);
         parameterPanel.setLayout(new BoxLayout(parameterPanel, BoxLayout.X_AXIS));
-        stringLabel = new JLabel("Enter string: ");
+        JLabel stringLabel = new JLabel("Enter string: ");
         stringLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         stringLabel.setForeground(new Color(14, 35, 46));
         textField = new JTextField();
@@ -122,7 +119,7 @@ public class CarPanel extends JPanel {
 
         Dimension d = new Dimension(150, 40);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        findButton = new JButton("Find");
+        JButton findButton = new JButton("Find");
         findButton.setFont(new Font("Arial", Font.PLAIN, 18));
         findButton.setPreferredSize(d);
         findButton.setMaximumSize(new Dimension(150, 40));
@@ -136,9 +133,9 @@ public class CarPanel extends JPanel {
         updateButton.setMaximumSize(d);
         updateButton.setIcon(new ImageIcon("update.png"));
         updateButton.setHorizontalTextPosition(AbstractButton.RIGHT);
-        //  updateButton.addActionListener(new updateListener());
+        updateButton.addActionListener(new UpdateListener());
 
-        insertButton = new JButton("Insert");
+        JButton insertButton = new JButton("Insert");
         insertButton.setFont(new Font("Arial", Font.PLAIN, 18));
         insertButton.setMaximumSize(d);
         insertButton.setIcon(new ImageIcon("insert.png"));
@@ -151,13 +148,7 @@ public class CarPanel extends JPanel {
         deleteButton.setMaximumSize(d);
         deleteButton.setIcon(new ImageIcon("delete.png"));
         deleteButton.setHorizontalTextPosition(AbstractButton.RIGHT);
-
-        goBackButton = new JButton("Go back");
-        goBackButton.setFont(new Font("Arial", Font.PLAIN, 18));
-        goBackButton.setMaximumSize(d);
-        goBackButton.setIcon(new ImageIcon("goback.png"));
-        goBackButton.setHorizontalTextPosition(AbstractButton.RIGHT);
-        // goBackButton.addActionListener(new goBackListener());
+        deleteButton.addActionListener(new DeleteListener());
 
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         buttonPanel.add(Box.createRigidArea(new Dimension(100, 0)));
@@ -168,8 +159,6 @@ public class CarPanel extends JPanel {
         buttonPanel.add(updateButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         buttonPanel.add(deleteButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        buttonPanel.add(goBackButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainRow.add(buttonPanel);
 
@@ -183,20 +172,28 @@ public class CarPanel extends JPanel {
         rowSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         rowSelectionModel.addListSelectionListener(new ListSelectionListener() {
+            /**
+             * Method that overrides the default one to make the update and delete buttons enabled if a row is selected.
+             * @param e The event of selecting a row.
+             */
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int[] indexes = tab.getSelectedRows();
 
-                if (indexes.length == 0)
+                if (indexes.length == 0) {
                     updateButton.setEnabled(false);
-                else
+                    deleteButton.setEnabled(false);
+                } else {
                     updateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+                }
             }
         });
     }
 
     /**
      * Method that allows to fill the table with the desired data.
+     *
      * @param dataToBeInserted The Object matrix containing car records.
      */
     public static void repaintTable(Object[][] dataToBeInserted) {

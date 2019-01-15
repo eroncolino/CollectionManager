@@ -50,6 +50,8 @@ public class Main {
      */
     public static void showLoginPanel() {
         loginPanel = new LoginPanel();
+        if (carPanel != null)
+            carPanel.setVisible(false);
         loginPanel.setOpaque(false);
         backgroundPanel.add(loginPanel);
 
@@ -71,6 +73,5 @@ public class Main {
         MenuBarBuilder menuBarBuilder = new MenuBarBuilder();
         JMenuBar extendedMenuBar = menuBarBuilder.buildExtendedMenuBar();
         Main.frame.setJMenuBar(extendedMenuBar);
-        //todo rechange menu bar once user logsout
     }
 }

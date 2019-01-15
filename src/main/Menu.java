@@ -1,9 +1,6 @@
 package main;
 
-import main.menuitems.AboutMenuItem;
-import main.menuitems.CSVImportMenuItem;
-import main.menuitems.DeleteAccountMenuItem;
-import main.menuitems.ExitMenuItem;
+import main.menuitems.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,11 +42,13 @@ public class Menu {
 
         CSVImportMenuItem importMenuItem = new CSVImportMenuItem();
         DeleteAccountMenuItem deleteAccountMenuItem = new DeleteAccountMenuItem();
+        LogOutMenuItem logOutMenuItem = new LogOutMenuItem();
         AboutMenuItem aboutMenuItem = new AboutMenuItem();
         ExitMenuItem exitMenuItem = new ExitMenuItem();
 
         userMenu.add(importMenuItem.buildCSVImportMenuItem());
         userMenu.add(deleteAccountMenuItem.buildDeleteAccountMenuItem());
+        userMenu.add(logOutMenuItem.buildLogOutMenuItem());
         userMenu.add(aboutMenuItem.buildAboutMenuItem());
         userMenu.add(exitMenuItem.buildExitMenuItem());
 

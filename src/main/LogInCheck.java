@@ -107,7 +107,7 @@ public class LogInCheck {
             }
             else {
                 try {
-                    User user = DatabaseConnection.getInstance().getUser(username, password);
+                    DatabaseConnection.getInstance().getUser(username, password);
                     String message = "Welcome back " + username + "! Your data will be loaded.";
                     JOptionPane.showMessageDialog(null, message, "Successful login", JOptionPane.PLAIN_MESSAGE);
                     Main.showCarPanel();

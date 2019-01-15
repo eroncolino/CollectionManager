@@ -6,20 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-
 /**
- * Class that implements the action listener class to listen to the find button.
+ * Class that implements the action listener class to listen to the update button.
  *
  * @author Elena Roncolino
  */
-public class InsertListener implements ActionListener {
+public class UpdateListener implements ActionListener {
     /**
-     * Method that overrides the default one and queries the database in order to find a match for the given input.
+     * Method that overrides the default one and queries the database in order to update the selected record.
      *
      * @param e The generated event caused by pressing the button.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        int index = CarPanel.tab.getSelectedRow();
+
         // Container
         JPanel addPanel = new JPanel();
         addPanel.setLayout(new BoxLayout(addPanel, BoxLayout.Y_AXIS));
@@ -31,7 +32,7 @@ public class InsertListener implements ActionListener {
 
         JLabel name = new JLabel("Name");
         name.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField nameField = new JTextField();
+        JTextField nameField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 1)));
         firstRow.add(name);
         firstRow.add(Box.createRigidArea(new Dimension(138, 0)));
         firstRow.add(nameField);
@@ -44,7 +45,7 @@ public class InsertListener implements ActionListener {
 
         JLabel brand = new JLabel("Brand");
         brand.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField brandField = new JTextField();
+        JTextField brandField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 2)));
         secondRow.add(brand);
         secondRow.add(Box.createRigidArea(new Dimension(138, 0)));
         secondRow.add(brandField);
@@ -58,7 +59,7 @@ public class InsertListener implements ActionListener {
 
         JLabel cubicCapacity = new JLabel("Cubic capacity");
         cubicCapacity.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField cubicCapacityField = new JTextField();
+        JTextField cubicCapacityField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 3)));
         thirdRow.add(cubicCapacity);
         thirdRow.add(Box.createRigidArea(new Dimension(70, 0)));
         thirdRow.add(cubicCapacityField);
@@ -72,7 +73,7 @@ public class InsertListener implements ActionListener {
 
         JLabel ps = new JLabel("PS");
         ps.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField psField = new JTextField();
+        JTextField psField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 4)));
         fourthRow.add(ps);
         fourthRow.add(Box.createRigidArea(new Dimension(162, 0)));
         fourthRow.add(psField);
@@ -86,7 +87,7 @@ public class InsertListener implements ActionListener {
 
         JLabel kw = new JLabel("KW");
         kw.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField kwField = new JTextField();
+        JTextField kwField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 5)));
         fifthRow.add(kw);
         fifthRow.add(Box.createRigidArea(new Dimension(158, 0)));
         fifthRow.add(kwField);
@@ -100,7 +101,7 @@ public class InsertListener implements ActionListener {
 
         JLabel cylinders = new JLabel("Cylinders");
         cylinders.setFont(new Font("Arial", Font.PLAIN, 18));
-        JTextField cylindersField = new JTextField();
+        JTextField cylindersField = new JTextField(String.valueOf(CarPanel.tab.getModel().getValueAt(index, 6)));
         sixthRow.add(cylinders);
         sixthRow.add(Box.createRigidArea(new Dimension(112, 0)));
         sixthRow.add(cylindersField);
@@ -116,6 +117,24 @@ public class InsertListener implements ActionListener {
         fuelType.setFont(new Font("Arial", Font.PLAIN, 18));
         String[] possibleFuels = {"Diesel", "Gasoline", "Hybrid", "Electric"};
         JComboBox comboBox = new JComboBox(possibleFuels);
+        String fuel = (String) CarPanel.tab.getModel().getValueAt(index, 7);
+        switch (fuel) {
+            case "Diesel":
+                comboBox.setSelectedIndex(0);
+                break;
+
+            case "Gasoline":
+                comboBox.setSelectedIndex(1);
+                break;
+
+            case "Hybrid":
+                comboBox.setSelectedIndex(2);
+                break;
+
+            case "Electric":
+                comboBox.setSelectedIndex(3);
+                break;
+        }
         seventhRow.add(fuelType);
         seventhRow.add(Box.createRigidArea(new Dimension(115, 0)));
         seventhRow.add(comboBox);
@@ -126,20 +145,19 @@ public class InsertListener implements ActionListener {
 
         //Add everything to JOptionPane
         int result = JOptionPane.showConfirmDialog(null,
-                addPanel, "Add car record", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                addPanel, "Update car record.", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.YES_OPTION) {
 
-
             if (nameField.getText().length() == 0 || nameField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car name field cannot be null and can be at most 50 characters long.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (brandField.getText().length() == 0 || brandField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car brand field cannot be null and can be at most 50 characters long.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -147,7 +165,7 @@ public class InsertListener implements ActionListener {
                 Integer.parseInt(cubicCapacityField.getText());
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cubic capacity must be an integer.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -155,7 +173,7 @@ public class InsertListener implements ActionListener {
                 Integer.parseInt(psField.getText());
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "PS must be an integer.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -163,7 +181,7 @@ public class InsertListener implements ActionListener {
                 Integer.parseInt(kwField.getText());
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "KW must be an integer.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -171,19 +189,20 @@ public class InsertListener implements ActionListener {
                 Integer.parseInt(cylindersField.getText());
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cylinders must be an integer.\n" +
-                        "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                        "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String selectedFuel = (String) comboBox.getSelectedItem();
 
-            Car car = new Car(nameField.getText(), brandField.getText(), Integer.parseInt(cubicCapacityField.getText()),
-                    Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
-                    Integer.parseInt(cylindersField.getText()), selectedFuel, User.getUserId());
+            int carId = (int) CarPanel.tab.getModel().getValueAt(index, 0);
 
             try {
-                DatabaseConnection.getInstance().insertCar(car);
-                DatabaseConnection.getInstance().insertCar(car);
+                DatabaseConnection.getInstance().updateCar(carId, nameField.getText(), brandField.getText(),
+                        Integer.parseInt(cubicCapacityField.getText()),
+                        Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
+                        Integer.parseInt(cylindersField.getText()), selectedFuel);
+
                 CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
             } catch (SQLException e1) {
                 e1.printStackTrace();
@@ -191,4 +210,3 @@ public class InsertListener implements ActionListener {
         }
     }
 }
-

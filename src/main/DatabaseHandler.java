@@ -54,9 +54,10 @@ public interface DatabaseHandler {
 
     /**
      * Method that deletes a user from the database.
-     * @param user The user to be deleted.
+     * @param userId The user to be deleted.
+     * @throws SQLException If there is a problem in the JDBC.
      */
-    void deleteUser(User user);
+    void deleteUser(int userId) throws SQLException;
 
     /**
      * Method that checks if the credentials are stored in the database and returns the current main.User Object.
@@ -100,25 +101,43 @@ public interface DatabaseHandler {
     /**
      * Method that inserts a car record into the database.
      * @param car The car record that has to be inserted.
+     * @throws SQLException If there is a problem in the JDBC.
      */
-    void insertCar(Car car);
+    void insertCar(Car car) throws SQLException;
 
     /**
      * Method that inserts a car list into the database.
      * @param cars The list of cars to be inserted.
+     * @throws SQLException If there is a problem in the JDBC.
      */
-    void insertCarList(List<Car> cars);
+    void insertCarList(List<Car> cars) throws SQLException;
 
     /**
      * Method that allows to update a car.
      * @param carId The id of the car to be updated.
+     * @param name The new car name.
+     * @param brand The new car brand.
+     * @param cubicCapacity The new cubic capacity.
+     * @param ps The new PS value.
+     * @param kw The new KW value.
+     * @param cylinders The new cylinders value.
+     * @param fuel The new fuel type.
+     * @throws SQLException If there is a problem in the JDBC.
      */
-    void updateCar(int carId);
+    void updateCar(int carId, String name, String brand, int cubicCapacity, int ps, int kw, int cylinders, String fuel) throws SQLException;
 
     /**
      * Method that deletes a car record from the database.
-     * @param car The car record to be deleted.
+     * @param carId The id of the car to be deleted.
+     * @throws SQLException If there is a problem in the JDBC.
      */
-    void deleteCar(Car car);
+    void deleteCar(int carId) throws SQLException;
+
+    /**
+     * Method that deletes all the car records of a given user.
+     * @param userId The id of the user whose cars have to be deleted.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    void deleteCarsFromUserId(int userId) throws SQLException;
 
 }

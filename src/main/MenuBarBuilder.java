@@ -24,7 +24,7 @@ public class MenuBarBuilder {
     }
 
     /**
-     * Method that builds a extended menu bar with the functionalities that can be accessed
+     * Method that builds a extended menu bar with the functionalities that can be accessed.
      * when the user has logged in.
      * @return JMenuBar The extended menu bar.
      */
