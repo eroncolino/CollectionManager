@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static main.CarPanel.repaintTable;
 import static main.CarPanel.textField;
@@ -14,8 +16,10 @@ import static main.CarPanel.textField;
  * @author Elena Roncolino
  */
 public class FindListener implements ActionListener {
+    private static final Logger logger = Logger.getLogger(FindListener.class.getName());
+
     /**
-     * Method that overrides the default one and queries the database in order to find a match for the given input.
+     * Overrides the default one and queries the database in order to find a match for the given input.
      *
      * @param e The generated event caused by pressing the button.
      */
@@ -27,9 +31,9 @@ public class FindListener implements ActionListener {
 
         if (selectedColumn == "Show all") {
             try {
-                repaintTable(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+                repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                logger.log(Level.SEVERE, "Problem with the database", e);
             }
             textField.setText("");
         } else {
@@ -46,11 +50,11 @@ public class FindListener implements ActionListener {
 
                                 else {
                                     JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = (DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+                                    myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
                                     repaintTable(myData);
                                 }
                             } catch (SQLException e1) {
-                                e1.printStackTrace();
+                                logger.log(Level.SEVERE, "Problem with the database", e);
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "Car name must be shorter than 50 characters.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -67,7 +71,7 @@ public class FindListener implements ActionListener {
 
                                 else {
                                     JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = (DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+                                    myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
                                     repaintTable(myData);
                                 }
                             } catch (SQLException e1) {
@@ -88,7 +92,7 @@ public class FindListener implements ActionListener {
 
                             else {
                                 JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                myData = DatabaseConnection.getInstance().getCarsByUserId(User.getUserId());
+                                myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
                                 repaintTable(myData);
                             }
                         } catch (NumberFormatException n) {
@@ -108,7 +112,7 @@ public class FindListener implements ActionListener {
 
                             else {
                                 JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                myData = DatabaseConnection.getInstance().getCarsByUserId(User.getUserId());
+                                myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
                                 repaintTable(myData);
                             }
                         } catch (NumberFormatException n) {
@@ -128,7 +132,7 @@ public class FindListener implements ActionListener {
 
                             else {
                                 JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                myData = DatabaseConnection.getInstance().getCarsByUserId(User.getUserId());
+                                myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
                                 repaintTable(myData);
                             }
                         } catch (NumberFormatException n) {
@@ -148,7 +152,7 @@ public class FindListener implements ActionListener {
 
                             else {
                                 JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                myData = DatabaseConnection.getInstance().getCarsByUserId(User.getUserId());
+                                myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
                                 repaintTable(myData);
                             }
                         } catch (NumberFormatException n) {
@@ -171,7 +175,7 @@ public class FindListener implements ActionListener {
 
                                 else {
                                     JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = DatabaseConnection.getInstance().getCarsByUserId(User.getUserId());
+                                    myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
                                     repaintTable(myData);
                                 }
                             } catch (SQLException e1) {

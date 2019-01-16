@@ -34,6 +34,18 @@ public interface DatabaseHandler {
     String getDatabaseName();
 
     /**
+     * Gets the number of added record during the current session.
+     * @return int The number of added records.
+     */
+    int getAddedRecordsNumber();
+
+    /**
+     * Gets the number of deleted record during the current session.
+     * @return int The number of deleted records.
+     */
+    int getDeletedRecordsNumber();
+
+    /**
      *  Method that allows to check if the chosen username is already stored in the database.
      * @param username The username to be checked.
      * @return boolean Returns <code>true</code> if that username already exists in the database.
@@ -50,7 +62,6 @@ public interface DatabaseHandler {
      * @throws SQLException If there is a problem in the JDBC.
      */
     void addUser(String username, String password, Image image) throws IOException, SQLException;
-
 
     /**
      * Method that deletes a user from the database.
@@ -71,12 +82,28 @@ public interface DatabaseHandler {
     User getUser(String username, String password) throws SQLException, IOException, UserNotFoundException;
 
     /**
+     * Gets the total number of records a user has stored in the database.
+     * @param userId The user id.
+     * @return int The number of records.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    int getTotalNumberOfRecordsByUserId(int userId) throws SQLException;
+
+    /**
+     * Method that returns a list of cars given user id as input.
+     * @param userId The user id.
+     * @return List A list of cars.
+     * @throws SQLException If there is a problem in the JDBC.
+     */
+    List<Car> getCarsByUserId(int userId) throws SQLException;
+
+    /**
      * Method that allows to retrieve all the cars that a user has stored in his collection manager.
      * @param userId The id of the user.
      * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
      * @throws SQLException If there is a problem in the JDBC.
      */
-    Object[][] getCarsByUserId(int userId) throws SQLException;
+    Object[][] getCarsMatrixByUserId(int userId) throws SQLException;
 
     /**
      * Method that allows to retrieve all the cars with the given string value in the specified column.

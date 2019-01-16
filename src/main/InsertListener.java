@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -13,8 +15,10 @@ import java.sql.SQLException;
  * @author Elena Roncolino
  */
 public class InsertListener implements ActionListener {
+    private static final Logger logger = Logger.getLogger(InsertListener.class.getName());
+
     /**
-     * Method that overrides the default one and queries the database in order to find a match for the given input.
+     * Overrides the default one and queries the database in order to find a match for the given input.
      *
      * @param e The generated event caused by pressing the button.
      */
@@ -134,12 +138,14 @@ public class InsertListener implements ActionListener {
             if (nameField.getText().length() == 0 || nameField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car name field cannot be null and can be at most 50 characters long.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect car name");
                 return;
             }
 
             if (brandField.getText().length() == 0 || brandField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car brand field cannot be null and can be at most 50 characters long.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect car brand");
                 return;
             }
 
@@ -148,6 +154,7 @@ public class InsertListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cubic capacity must be an integer.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Wrong input format");
                 return;
             }
 
@@ -156,6 +163,7 @@ public class InsertListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "PS must be an integer.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Wrong input format");
                 return;
             }
 
@@ -164,6 +172,7 @@ public class InsertListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "KW must be an integer.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Wrong input format");
                 return;
             }
 
@@ -172,6 +181,7 @@ public class InsertListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cylinders must be an integer.\n" +
                         "No record will be added.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Wrong input format");
                 return;
             }
 
@@ -183,10 +193,10 @@ public class InsertListener implements ActionListener {
 
             try {
                 DatabaseConnection.getInstance().insertCar(car);
-                DatabaseConnection.getInstance().insertCar(car);
-                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                logger.log(Level.SEVERE, "Problem with the databse", e);
+
             }
         }
     }

@@ -4,18 +4,20 @@ import javafx.scene.image.Image;
 
 /**
  * Class that represents a user.
+ *
  * @author Elena Roncolino
  */
 public class User {
-    static String username, password;
-    static int id;
-    Image image;
+    private static String username, password;
+    private static int id;
+    private static Image image;
 
     /**
      * User constructor.
+     *
      * @param username The username chosen.
      * @param password The password chosen.
-     * @param image The chosen profile image.
+     * @param image    The chosen profile image.
      */
     public User(int id, String username, String password, Image image) {
         User.id = id;
@@ -26,16 +28,29 @@ public class User {
 
     /**
      * User id getter.
+     *
      * @return int The user id.
      */
-    public static int getUserId(){ return id; }
+    public static int getUserId() {
+        return id;
+    }
 
     /**
      * Username getter.
+     *
      * @return String The username.
      */
-   public static String getUsername(){
+    public static String getUsername() {
         return username;
+    }
+
+    /**
+     * User image getter.
+     *
+     * @return Image The chosen image.
+     */
+    public static Image getImage() {
+        return image;
     }
 
 

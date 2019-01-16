@@ -13,7 +13,7 @@ import java.awt.*;
 public class Menu {
 
     /**
-     * Method that builds a simple menu and adds to this menu the required menu items.
+     * Builds a simple menu and adds to this menu the required menu items.
      * @return JMenu The menu with an about and an exit menu items.
      */
     public JMenu buildHomeMenu(){
@@ -32,7 +32,7 @@ public class Menu {
     }
 
     /**
-     * Method that builds an extended menu and adds to this menu the required menu items.
+     * Builds an extended menu and adds to this menu the required menu items.
      * @return JMenu The menu with several menu items.
      */
     public JMenu buildUserMenu(){
@@ -41,34 +41,22 @@ public class Menu {
         userMenu.setIcon(userImage);
 
         CSVImportMenuItem importMenuItem = new CSVImportMenuItem();
+        CSVExportMenuItem exportMenuItem = new CSVExportMenuItem();
         DeleteAccountMenuItem deleteAccountMenuItem = new DeleteAccountMenuItem();
         LogOutMenuItem logOutMenuItem = new LogOutMenuItem();
+        StatisticsMenuItem statisticsMenuItem = new StatisticsMenuItem();
         AboutMenuItem aboutMenuItem = new AboutMenuItem();
         ExitMenuItem exitMenuItem = new ExitMenuItem();
 
         userMenu.add(importMenuItem.buildCSVImportMenuItem());
+        userMenu.add(exportMenuItem.CSVExportMenuItem());
         userMenu.add(deleteAccountMenuItem.buildDeleteAccountMenuItem());
         userMenu.add(logOutMenuItem.buildLogOutMenuItem());
+        userMenu.add(statisticsMenuItem.buildStatisticsMenuItem());
         userMenu.add(aboutMenuItem.buildAboutMenuItem());
         userMenu.add(exitMenuItem.buildExitMenuItem());
 
         return userMenu;
 
     }
-
-    //todo to uncomment in case you'll have multiple imports
-    /*
-    public JMenu buildImportMenu(){
-        JMenu importMenu = new JMenu("Import");
-        ImageIcon importImage = new ImageIcon(new ImageIcon("images/import.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        importMenu.setIcon(importImage);
-
-        CSVImportMenuItem csvImportMenuItem = new CSVImportMenuItem();
-
-        importMenu.add(csvImportMenuItem.buildCSVImportMenuItem());
-
-        return importMenu;
-    }*/
-
-
 }

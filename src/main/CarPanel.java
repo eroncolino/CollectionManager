@@ -6,6 +6,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that displays the panel where the user can manage his collection.
@@ -19,6 +21,8 @@ public class CarPanel extends JPanel {
     private JButton deleteButton;
     private JButton updateButton;
     private static String[] tableColumns;
+
+    private static final Logger logger = Logger.getLogger(CarPanel.class.getName());
 
     /**
      * Car panel constructor.
@@ -106,7 +110,7 @@ public class CarPanel extends JPanel {
         mainRow.add(tablePanel);
 
         try {
-            repaintTable(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+            repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -173,7 +177,7 @@ public class CarPanel extends JPanel {
 
         rowSelectionModel.addListSelectionListener(new ListSelectionListener() {
             /**
-             * Method that overrides the default one to make the update and delete buttons enabled if a row is selected.
+             * Overrides the default one to make the update and delete buttons enabled if a row is selected.
              * @param e The event of selecting a row.
              */
             @Override
@@ -192,22 +196,25 @@ public class CarPanel extends JPanel {
     }
 
     /**
-     * Method that allows to fill the table with the desired data.
+     * Fills the table with the desired data.
      *
      * @param dataToBeInserted The Object matrix containing car records.
      */
     public static void repaintTable(Object[][] dataToBeInserted) {
-        tab.setModel(new CustomTableModel(dataToBeInserted, tableColumns));
+        if (tab != null) {
+            logger.log(Level.INFO, "Repainting table");
+            tab.setModel(new CustomTableModel(dataToBeInserted, tableColumns));
 
-        TableColumnModel columnModel = tab.getColumnModel();
-        columnModel.getColumn(1).setPreferredWidth(150);
-        columnModel.getColumn(2).setPreferredWidth(100);
-        columnModel.getColumn(3).setPreferredWidth(20);
-        columnModel.getColumn(4).setPreferredWidth(20);
-        columnModel.getColumn(5).setPreferredWidth(20);
-        columnModel.getColumn(6).setPreferredWidth(20);
-        columnModel.getColumn(7).setPreferredWidth(50);
-        tab.removeColumn(columnModel.getColumn(0));
-        textField.setText("");
+            TableColumnModel columnModel = tab.getColumnModel();
+            columnModel.getColumn(1).setPreferredWidth(150);
+            columnModel.getColumn(2).setPreferredWidth(100);
+            columnModel.getColumn(3).setPreferredWidth(20);
+            columnModel.getColumn(4).setPreferredWidth(20);
+            columnModel.getColumn(5).setPreferredWidth(20);
+            columnModel.getColumn(6).setPreferredWidth(20);
+            columnModel.getColumn(7).setPreferredWidth(50);
+            tab.removeColumn(columnModel.getColumn(0));
+            textField.setText("");
+        }
     }
 }

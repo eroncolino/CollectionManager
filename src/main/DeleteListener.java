@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that implements the action listener class to listen to the update button.
@@ -11,9 +13,10 @@ import java.sql.SQLException;
  * @author Elena Roncolino
  */
 public class DeleteListener implements ActionListener {
+    private static final Logger logger = Logger.getLogger(DeleteListener.class.getName());
 
     /**
-     * Method that overrides the default one and queries the database in order to update the selected record.
+     * Overrides the default one and queries the database in order to update the selected record.
      *
      * @param e The generated event caused by pressing the button.
      */
@@ -28,7 +31,7 @@ public class DeleteListener implements ActionListener {
             try {
                 DatabaseConnection.getInstance().deleteCar(carId);
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                logger.log(Level.SEVERE, "Problem with the database", e);
             }
         }
     }

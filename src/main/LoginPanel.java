@@ -6,15 +6,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that sets up the panel where the user can enter the username and password
+ *
  * @author Elena Roncolino
  */
 public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton enterButton;
+
+    private static final Logger logger = Logger.getLogger(LoginPanel.class.getName());
 
     /**
      * Constructor of the login panel.
@@ -81,21 +86,21 @@ public class LoginPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Object[] options = {"Sign up", "Cancel"};
-                UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("Arial",Font.PLAIN,20)));
+                UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("Arial", Font.PLAIN, 20)));
                 int result = JOptionPane.showOptionDialog(null,
                         new SignUpPanel(), "Sign up", JOptionPane.YES_NO_OPTION,
                         JOptionPane.PLAIN_MESSAGE, null, options, null);
 
                 //If the user wants to sign up, then the correctness of the password and of th username
-                if (result == JOptionPane.YES_OPTION){
-                    boolean canAddUser = LogInCheck.checkDataRequirements(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getConfirmedPassword());
+                if (result == JOptionPane.YES_OPTION) {
+                    boolean canAddUser = CredentialsValidator.checkDataRequirements(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getConfirmedPassword());
                     if (canAddUser) {
                         try {
                             DatabaseConnection.getInstance().addUser(SignUpPanel.getUsername(), SignUpPanel.getPassword(), SignUpPanel.getImageFile());
                         } catch (IOException e1) {
-                            e1.printStackTrace();
+                            logger.log(Level.SEVERE, "Problem getting user image", e);
                         } catch (SQLException e1) {
-                            e1.printStackTrace();
+                            logger.log(Level.SEVERE, "Problem with the database", e);
                         }
                     }
                 }
@@ -158,11 +163,12 @@ public class LoginPanel extends JPanel {
 
         /**
          * Method that overrides the default one and calls another method to check if the inserted username and password are correct.
+         *
          * @param e The event that occurs.
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogInCheck.checkCredentials(usernameField.getText(), new String(passwordField.getPassword()));
+            CredentialsValidator.checkCredentials(usernameField.getText(), new String(passwordField.getPassword()));
         }
     }
 }

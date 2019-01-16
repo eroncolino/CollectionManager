@@ -1,20 +1,25 @@
 package main.menuitems;
+
 import main.DatabaseConnection;
-import main.Main;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that creates the exit menu item.
+ *
  * @author Elena Roncolino
  */
 public class ExitMenuItem extends JMenuItem {
+    private static final Logger logger = Logger.getLogger(ExitMenuItem.class.getName());
 
     /**
      * Method that builds the exit menu item.
+     *
      * @return JMenuItem The exit menu item.
      */
     public JMenuItem buildExitMenuItem() {
@@ -30,8 +35,9 @@ public class ExitMenuItem extends JMenuItem {
                 int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the application?",
                         "Quit application", JOptionPane.YES_NO_CANCEL_OPTION);
 
-                if (result == JOptionPane.YES_OPTION){
+                if (result == JOptionPane.YES_OPTION) {
                     DatabaseConnection.getInstance().closeConnection();
+                    logger.log(Level.INFO, "Application closed");
                     System.exit(0);
                 }
             }

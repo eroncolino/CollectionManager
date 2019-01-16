@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that implements the action listener class to listen to the update button.
@@ -12,8 +14,10 @@ import java.sql.SQLException;
  * @author Elena Roncolino
  */
 public class UpdateListener implements ActionListener {
+    private static final Logger logger = Logger.getLogger(UpdateListener.class.getName());
+
     /**
-     * Method that overrides the default one and queries the database in order to update the selected record.
+     * Overrides the default one and queries the database in order to update the selected record.
      *
      * @param e The generated event caused by pressing the button.
      */
@@ -152,12 +156,14 @@ public class UpdateListener implements ActionListener {
             if (nameField.getText().length() == 0 || nameField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car name field cannot be null and can be at most 50 characters long.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect car name format");
                 return;
             }
 
             if (brandField.getText().length() == 0 || brandField.getText().length() > 50) {
                 JOptionPane.showMessageDialog(null, "Car brand field cannot be null and can be at most 50 characters long.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect car brand format");
                 return;
             }
 
@@ -166,6 +172,7 @@ public class UpdateListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cubic capacity must be an integer.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect cubic capacity format");
                 return;
             }
 
@@ -174,6 +181,7 @@ public class UpdateListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "PS must be an integer.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect ps format");
                 return;
             }
 
@@ -182,6 +190,7 @@ public class UpdateListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "KW must be an integer.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect kw format");
                 return;
             }
 
@@ -190,6 +199,7 @@ public class UpdateListener implements ActionListener {
             } catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(null, "Cylinders must be an integer.\n" +
                         "No record will be updated.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Incorrect cylinders format");
                 return;
             }
 
@@ -203,9 +213,9 @@ public class UpdateListener implements ActionListener {
                         Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
                         Integer.parseInt(cylindersField.getText()), selectedFuel);
 
-                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()));
+                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                logger.log(Level.SEVERE, "Problem with the database", e);
             }
         }
     }

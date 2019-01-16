@@ -21,9 +21,10 @@ import java.io.*;
 
 /**
  * Class that will be shown inside the JOptionPane and that allows the user to sign up by choosing a username, a password and an optional profile image.
+ *
  * @author Elena Roncolino
  */
-public class SignUpPanel extends JPanel{
+public class SignUpPanel extends JPanel {
     private JFXPanel jfxPanel;
     private Circle circle;
     private static JTextField usernameField;
@@ -52,11 +53,11 @@ public class SignUpPanel extends JPanel{
         usernameField = new JTextField();
 
         usernamePanel.setLayout(new BoxLayout(usernamePanel, BoxLayout.X_AXIS));
-        usernamePanel.add(Box.createRigidArea(new Dimension(20,0)));
+        usernamePanel.add(Box.createRigidArea(new Dimension(20, 0)));
         usernamePanel.add(username);
         usernamePanel.add(Box.createRigidArea(new Dimension(30, 0)));
         usernamePanel.add(usernameField);
-        usernamePanel.add(Box.createRigidArea(new Dimension(20,0)));
+        usernamePanel.add(Box.createRigidArea(new Dimension(20, 0)));
 
         //Password row
         JPanel passwordPanel = new JPanel();
@@ -67,11 +68,11 @@ public class SignUpPanel extends JPanel{
         passwordField = new JPasswordField();
 
         passwordPanel.setLayout(new BoxLayout(passwordPanel, BoxLayout.X_AXIS));
-        passwordPanel.add(Box.createRigidArea(new Dimension(20,0)));
+        passwordPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         passwordPanel.add(password);
         passwordPanel.add(Box.createRigidArea(new Dimension(30, 0)));
         passwordPanel.add(passwordField);
-        passwordPanel.add(Box.createRigidArea(new Dimension(20,0)));
+        passwordPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 
         //Confirm password row
         JPanel confirmPanel = new JPanel();
@@ -82,29 +83,29 @@ public class SignUpPanel extends JPanel{
         confirmField = new JPasswordField();
 
         confirmPanel.setLayout(new BoxLayout(confirmPanel, BoxLayout.X_AXIS));
-        confirmPanel.add(Box.createRigidArea(new Dimension(20,0)));
+        confirmPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         confirmPanel.add(confirm);
         confirmPanel.add(Box.createRigidArea(new Dimension(45, 0)));
         confirmPanel.add(confirmField);
-        confirmPanel.add(Box.createRigidArea(new Dimension(20,0)));
+        confirmPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 
-       //Add everything to mail panel and set layout
+        //Add everything to mail panel and set layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(Box.createRigidArea(new Dimension(700, 10)));
+        add(Box.createRigidArea(new Dimension(500, 10)));
         add(buttonPanel);
-        add(Box.createRigidArea(new Dimension(700,40)));
+        add(Box.createRigidArea(new Dimension(500, 40)));
         add(usernamePanel);
-        add(Box.createRigidArea(new Dimension(700,20)));
+        add(Box.createRigidArea(new Dimension(500, 20)));
         add(passwordPanel);
-        add(Box.createRigidArea(new Dimension(700,20)));
+        add(Box.createRigidArea(new Dimension(500, 20)));
         add(confirmPanel);
-        add(Box.createRigidArea(new Dimension(700,30)));
+        add(Box.createRigidArea(new Dimension(500, 30)));
     }
 
     /**
-     * Method that initialized the jfxPanel and creates a scene in order to set a profile image inside a circular shape.
+     * Initializes the jFXPanel and creates a scene in order to set a profile image inside a circular shape.
      */
-    private void initComponents(){
+    private void initComponents() {
         jfxPanel = new JFXPanel();
         jfxPanel.setPreferredSize(new Dimension(300, 200));
 
@@ -115,9 +116,9 @@ public class SignUpPanel extends JPanel{
     }
 
     /**
-     * Method to create a scene: it draws a circle and fill it with the desired image.
+     * Creates a scene: it draws a circle and fill it with the desired image.
      */
-    private void createScene(){
+    private void createScene() {
         Platform.setImplicitExit(false); //Prevent thread from dying once jfxPanel is closed
         PlatformImpl.startup(
                 new Runnable() {
@@ -132,7 +133,7 @@ public class SignUpPanel extends JPanel{
                         circle = new Circle(80);
                         circle.setTranslateX(60);
                         circle.setTranslateY(60);
-                        circle.setCenterX(300);
+                        circle.setCenterX(190);
                         circle.setCenterY(50);
                         circle.setStroke(Color.rgb(14, 35, 46));
                         circle.setStrokeWidth(2.0);
@@ -149,7 +150,8 @@ public class SignUpPanel extends JPanel{
     private class imageChooserListener implements ActionListener {
 
         /**
-         * Method that overrides the default one and displays the chosen profile image
+         * Overrides the default one and displays the chosen profile image
+         *
          * @param e The event that occurs.
          */
         @Override
@@ -161,14 +163,13 @@ public class SignUpPanel extends JPanel{
             fileChooser.setAcceptAllFileFilterUsed(false);
             int returnValue = fileChooser.showOpenDialog(new JPanel());
 
-            if(returnValue == JFileChooser.APPROVE_OPTION){
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File chosenFile = fileChooser.getSelectedFile();
 
-                if (chosenFile.length() < 524288000){
+                if (chosenFile.length() < 524288000) {
                     image = new Image(chosenFile.toURI().toString());
                     circle.setFill(new ImagePattern(image, 0, 0, 1, 1, true));
-                }
-                else {
+                } else {
                     throw new ImageTooLargeException("The profile image cannot be larger than 5 MB!");
                 }
             }
@@ -177,33 +178,37 @@ public class SignUpPanel extends JPanel{
 
     /**
      * Getter for the username
+     *
      * @return String The entered username
      */
-    public static String getUsername(){
+    public static String getUsername() {
         return usernameField.getText();
     }
 
     /**
      * Getter for the password
+     *
      * @return String The entered password
      */
-    public static String getPassword(){
+    public static String getPassword() {
         return new String(passwordField.getPassword());
     }
 
     /**
      * Getter for the confirmed password
+     *
      * @return String The entered confirmed password
      */
-    public static String getConfirmedPassword(){
+    public static String getConfirmedPassword() {
         return new String(confirmField.getPassword());
     }
 
     /**
      * Getter for the inputStream of the chosen image.
+     *
      * @return InputStream The inputStream that will be used to store the selected image in the database.
      */
-    public static Image getImageFile(){
+    public static Image getImageFile() {
         return image;
     }
 }
