@@ -1,16 +1,12 @@
 package main.menuitems;
 
-import jdk.nashorn.internal.scripts.JO;
 import main.DatabaseConnection;
 import main.User;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -41,12 +37,10 @@ public class DeleteAccountMenuItem {
                         "Confirm delete account", JOptionPane.YES_NO_CANCEL_OPTION);
 
                 if (result == JOptionPane.YES_OPTION) {
-                    try {
-                        DatabaseConnection.getInstance().deleteCarsFromUserId(User.getUserId());
-                        DatabaseConnection.getInstance().deleteUser(User.getUserId());
-                    } catch (SQLException e1) {
-                        logger.log(Level.SEVERE, "Problems with the database");
-                    }
+
+                    DatabaseConnection.getInstance().deleteCarsFromUserId(User.getUserId());
+                    DatabaseConnection.getInstance().deleteUser(User.getUserId());
+
                 }
             }
         });

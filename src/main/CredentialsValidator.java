@@ -12,8 +12,6 @@ import javafx.scene.shape.Circle;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -21,21 +19,23 @@ import java.util.regex.Pattern;
 
 /**
  * Class that checks if the username and the two password entered meet the requirements.
+ *
  * @author Elena Roncolino
  */
 public class CredentialsValidator {
-    static JPanel container;
-    static JFXPanel jfxPanel;
+    private static JPanel container;
+    private static JFXPanel jfxPanel;
     static User user;
 
     private static final Logger logger = Logger.getLogger(CredentialsValidator.class.getName());
 
     /**
      * Checks if the username has less than 5 characters and if it contains more than one dash, underscore or period.
+     *
      * @param username The username entered.
      * @param password The password entered.
-     * @param confirm The confirm password entered.
-     * @return <code>true</code> if the method that it calls returns <code>true</code>, whiche means that all entered data is correct.
+     * @param confirm  The confirm password entered.
+     * @return <code>true</code> if the method that it calls returns <code>true</code>, which means that all entered data is correct.
      */
     public static boolean checkDataRequirements(String username, String password, String confirm) {
         logger.log(Level.INFO, "Checking username correctness");
@@ -43,9 +43,7 @@ public class CredentialsValidator {
         if (username.length() < 5 || username.length() > 30) {
             JOptionPane.showMessageDialog(null, "The username must be between 5 and 30 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
-        }
-
-        else {
+        } else {
             //Check if username contains more than one dot, one dash or one underscore
             Pattern p = Pattern.compile("[-._][^-._]*[-._]+");
             Matcher m = p.matcher(username);
@@ -54,8 +52,7 @@ public class CredentialsValidator {
                 JOptionPane.showMessageDialog(null, "The username can only contain one dash, one underscore or one dot!", "Error", JOptionPane.ERROR_MESSAGE);
                 logger.log(Level.WARNING, "Username does not meet requirements");
                 return false;
-            }
-            else {
+            } else {
                 return checkAlreadyUsedUsername(username, password, confirm);
             }
         }
@@ -63,27 +60,25 @@ public class CredentialsValidator {
 
     /**
      * Checks if the username entered already exists in the database.
+     *
      * @param username The username entered.
      * @param password The password entered.
-     * @param confirm The confirm password entered.
+     * @param confirm  The confirm password entered.
      * @return <code>true</code> if the method that it calls returns <code>true</code>.
      */
-    public static boolean checkAlreadyUsedUsername (String username, String password, String confirm){
+    private static boolean checkAlreadyUsedUsername(String username, String password, String confirm) {
         logger.log(Level.INFO, "Checking if username is already taken");
-        try {
-            if (DatabaseConnection.getInstance().usernameAlreadyExists(username))
-                return checkPasswordRequirements(password, confirm);
+        if (DatabaseConnection.getInstance().usernameAlreadyExists(username))
+            return checkPasswordRequirements(password, confirm);
 
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Problem with the database", e);
-        }
         return false;
     }
 
     /**
      * Checks if the password has more than 5 characters and, if it does, it calls the checkMatchingPassword() method.
+     *
      * @param password The password entered.
-     * @param confirm The confirm password entered.
+     * @param confirm  The confirm password entered.
      * @return <code>true</code> if the method that it calls returns <code>true</code>.
      */
     public static boolean checkPasswordRequirements(String password, String confirm) {
@@ -92,14 +87,14 @@ public class CredentialsValidator {
             JOptionPane.showMessageDialog(null, "The password must be at least 5 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
             logger.log(Level.WARNING, "Password does not meet the requirements");
             return false;
-        }
-        else
+        } else
             return checkMatchingPasswords(password, confirm);
     }
 
     /**
      * Checks if the two password entered match.
-     * @param password The password entered.
+     *
+     * @param password          The password entered.
      * @param confirmedPassword The second confirm password entered.
      * @return <code>true</code> if the two password coincide.
      */
@@ -108,14 +103,14 @@ public class CredentialsValidator {
             JOptionPane.showMessageDialog(null, "The two passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
             logger.log(Level.WARNING, "Passwords do not match");
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
     /**
      * Checks if the entered credentials are correct and retrieves the right user.
+     *
      * @param username The entered username.
      * @param password The entered password.
      */
@@ -124,34 +119,26 @@ public class CredentialsValidator {
         if (username.length() < 5 || username.length() > 30) {
             JOptionPane.showMessageDialog(null, "The username must be between 5 and 30 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
             logger.log(Level.WARNING, "Username does not meet the requirements");
-        }
-        else {
-            if (password.length() < 5){
+        } else {
+            if (password.length() < 5) {
                 JOptionPane.showMessageDialog(null, "The password must be at least 5 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
                 logger.log(Level.WARNING, "Password does not meet the requirements");
-            }
-            else {
-                try {
-                    user = DatabaseConnection.getInstance().getUser(username, password);
-                    container = new JPanel();
-                    container.setPreferredSize(new Dimension(450, 250));
-                    container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-                    initComponents();
-                    JPanel labelPanel = new JPanel();
-                    JLabel message = new JLabel("Welcome back " + username + "! Your data will be loaded.");
-                    message.setForeground(new java.awt.Color(14, 35, 46));
-                    message.setFont(new Font("Arial", Font.PLAIN, 18));
-                    labelPanel.add(message);
-                    message.setHorizontalAlignment(SwingUtilities.CENTER);
-                    container.add(labelPanel);
-                    container.add(Box.createRigidArea(new Dimension(40,0)));
-                    JOptionPane.showMessageDialog(null, container, "Successful login", JOptionPane.PLAIN_MESSAGE);
-                    Main.showCarPanel();
-                } catch (SQLException e) {
-                    logger.log(Level.SEVERE, "Problem with the database", e);
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, "Problem retrieving user", e);
-                }
+            } else {
+                user = DatabaseConnection.getInstance().getUser(username, password);
+                container = new JPanel();
+                container.setPreferredSize(new Dimension(450, 250));
+                container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+                initComponents();
+                JPanel labelPanel = new JPanel();
+                JLabel message = new JLabel("Welcome back " + username + "! Your data will be loaded.");
+                message.setForeground(new java.awt.Color(14, 35, 46));
+                message.setFont(new Font("Arial", Font.PLAIN, 18));
+                labelPanel.add(message);
+                message.setHorizontalAlignment(SwingUtilities.CENTER);
+                container.add(labelPanel);
+                container.add(Box.createRigidArea(new Dimension(40, 0)));
+                JOptionPane.showMessageDialog(null, container, "Successful login", JOptionPane.PLAIN_MESSAGE);
+                Main.showCarPanel();
             }
         }
     }
@@ -159,7 +146,7 @@ public class CredentialsValidator {
     /**
      * Initializes the jFXPanel and creates a scene in order to set a profile image inside a circular shape.
      */
-    private static void initComponents(){
+    private static void initComponents() {
         jfxPanel = new JFXPanel();
         jfxPanel.setPreferredSize(new Dimension(100, 130));
 
@@ -171,7 +158,7 @@ public class CredentialsValidator {
     /**
      * Creates a scene, draws a circle and fills it with the desired image.
      */
-    private static void createScene(){
+    private static void createScene() {
         Platform.setImplicitExit(false); //Prevent thread from dying once jfxPanel is closed
         PlatformImpl.startup(
                 new Runnable() {
@@ -185,7 +172,7 @@ public class CredentialsValidator {
                         Scene scene = new Scene(root, 100, 80);
                         scene.setFill(javafx.scene.paint.Color.rgb(238, 238, 238));
 
-                        if (User.getImage() != null){
+                        if (User.getImage() != null) {
                             placeholder = User.getImage();
                         } else
                             placeholder = new Image("file:images/man.png");

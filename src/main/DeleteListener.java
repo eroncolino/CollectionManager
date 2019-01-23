@@ -3,8 +3,6 @@ package main;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -25,14 +23,11 @@ public class DeleteListener implements ActionListener {
         int index = CarPanel.tab.getSelectedRow();
         int carId = (int) CarPanel.tab.getModel().getValueAt(index, 0);
 
-        int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to permanently delete this car?", "Warning", JOptionPane.WARNING_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to permanently delete this car?", "Warning", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
-            try {
-                DatabaseConnection.getInstance().deleteCar(carId);
-            } catch (SQLException e1) {
-                logger.log(Level.SEVERE, "Problem with the database", e);
-            }
+
+            DatabaseConnection.getInstance().deleteCar(carId);
         }
     }
 }

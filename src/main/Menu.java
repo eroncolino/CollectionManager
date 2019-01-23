@@ -49,7 +49,7 @@ public class Menu {
         ExitMenuItem exitMenuItem = new ExitMenuItem();
 
         userMenu.add(importMenuItem.buildCSVImportMenuItem());
-        userMenu.add(exportMenuItem.CSVExportMenuItem());
+        userMenu.add(exportMenuItem.csvExportMenuItem());
         userMenu.add(deleteAccountMenuItem.buildDeleteAccountMenuItem());
         userMenu.add(logOutMenuItem.buildLogOutMenuItem());
         userMenu.add(statisticsMenuItem.buildStatisticsMenuItem());

@@ -119,7 +119,7 @@ public class InsertListener implements ActionListener {
         JLabel fuelType = new JLabel("Fuel type");
         fuelType.setFont(new Font("Arial", Font.PLAIN, 18));
         String[] possibleFuels = {"Diesel", "Gasoline", "Hybrid", "Electric"};
-        JComboBox comboBox = new JComboBox(possibleFuels);
+        JComboBox<String> comboBox = new JComboBox<>(possibleFuels);
         seventhRow.add(fuelType);
         seventhRow.add(Box.createRigidArea(new Dimension(115, 0)));
         seventhRow.add(comboBox);
@@ -191,13 +191,8 @@ public class InsertListener implements ActionListener {
                     Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
                     Integer.parseInt(cylindersField.getText()), selectedFuel, User.getUserId());
 
-            try {
-                DatabaseConnection.getInstance().insertCar(car);
-                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-            } catch (SQLException e1) {
-                logger.log(Level.SEVERE, "Problem with the databse", e);
-
-            }
+            DatabaseConnection.getInstance().insertCar(car);
+            CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
         }
     }
 }

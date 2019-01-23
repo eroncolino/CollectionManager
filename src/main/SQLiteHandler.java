@@ -1,5 +1,7 @@
 package main;
 
+
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import main.exceptions.UserNotFoundException;
@@ -10,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -320,12 +321,12 @@ public class SQLiteHandler implements DatabaseHandler {
      * Returns a list of cars given user id as input.
      *
      * @param userId The user id.
-     * @return List A list of cars.
+     * @return ArrayList A list of cars.
      */
     @Override
-    public List<Car> getCarsByUserId(int userId) {
+    public ArrayList<Car> getCarsByUserId(int userId) {
         logger.entering(getClass().getName(), "getCarsByUserId");
-        ArrayList<Car> carsList = new ArrayList();
+        ArrayList<Car> carsList = new ArrayList<>();
 
         String query = "SELECT * FROM cars WHERE userid = ?";
 
@@ -355,12 +356,11 @@ public class SQLiteHandler implements DatabaseHandler {
      *
      * @param userId The id of the user.
      * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
-     * @throws SQLException If there is a problem in the JDBC.
      */
     @Override
     public Object[][] getCarsMatrixByUserId(int userId) {
         logger.entering(getClass().getName(), "getCarsMatrixByUserId");
-        List<Car> carsList = getCarsByUserId(userId);
+        ArrayList<Car> carsList = getCarsByUserId(userId);
 
         Object[][] carsArray = new Object[carsList.size()][8];
 
@@ -386,12 +386,11 @@ public class SQLiteHandler implements DatabaseHandler {
      * @param column The column name where the string has to be matched.
      * @param string The string to be matched.
      * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
-     * @throws SQLException If there is a problem in the JDBC.
      */
     @Override
-    public Object[][] getCarsByString(int userId, String column, String string) throws SQLException {
+    public Object[][] getCarsByString(int userId, String column, String string) {
         logger.entering(getClass().getName(), "getCarsByString");
-        ArrayList<Car> carsList = new ArrayList();
+        ArrayList<Car> carsList = new ArrayList<>();
 
         String query = "SELECT * FROM cars WHERE userId = ? AND UPPER(" + column + ") = UPPER(?)";
 
@@ -439,12 +438,11 @@ public class SQLiteHandler implements DatabaseHandler {
      * @param column The column name where the number has to be matched.
      * @param number The number to be matched.
      * @return Object[][] A matrix that contains all the cars data to be displayed in the table.
-     * @throws SQLException If there is a problem in the JDBC.
      */
     @Override
-    public Object[][] getCarsByInt(int userId, String column, int number) throws SQLException {
+    public Object[][] getCarsByInt(int userId, String column, int number) {
         logger.entering(getClass().getName(), "getCarsByInt");
-        ArrayList<Car> carsList = new ArrayList();
+        ArrayList<Car> carsList = new ArrayList<>();
 
         String query = "SELECT * FROM cars WHERE userId = ? AND " + column + " = ?";
 
@@ -522,10 +520,10 @@ public class SQLiteHandler implements DatabaseHandler {
     /**
      * Inserts a car list into the database.
      *
-     * @param cars The list of cars to be inserted.
+     * @param cars The arrayList of cars to be inserted.
      */
     @Override
-    public void insertCarList(List<Car> cars) {
+    public void insertCarList(ArrayList<Car> cars) {
         logger.entering(getClass().getName(), "insertCarList");
         String query = "INSERT INTO cars VALUES(null,?,?,?,?,?,?,?,?)";
         int res = 0;

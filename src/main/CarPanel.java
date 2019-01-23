@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * @author Elena Roncolino
  */
 public class CarPanel extends JPanel {
-    static JComboBox columnsList;
+    static JComboBox<String> columnsList;
     static JTextField textField;
     static JTable tab;
     private JButton deleteButton;
@@ -54,7 +54,7 @@ public class CarPanel extends JPanel {
         searchLabel.setForeground(new Color(14, 35, 46));
         String[] boxColumns = new String[]{"Show all", "Name", "Brand", "Cubic capacity", "PS", "KW", "Cylinders", "Fuel type"};
         tableColumns = new String[]{"ID", "Name", "Brand", "Cubic capacity", "PS", "KW", "Cylinders", "Fuel type"};
-        columnsList = new JComboBox(boxColumns);
+        columnsList = new JComboBox<>(boxColumns);
         columnsList.setPreferredSize(new Dimension(200, 20));
         columnsList.setMaximumSize(new Dimension(200, 20));
         criteria.add(searchLabel);
@@ -109,11 +109,7 @@ public class CarPanel extends JPanel {
         tablePanel.add(pane);
         mainRow.add(tablePanel);
 
-        try {
-            repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
 
         tab.setToolTipText("Click to select a row.");
 

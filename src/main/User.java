@@ -15,6 +15,7 @@ public class User {
     /**
      * User constructor.
      *
+     * @param id       The user id.
      * @param username The username chosen.
      * @param password The password chosen.
      * @param image    The chosen profile image.
@@ -23,7 +24,7 @@ public class User {
         User.id = id;
         User.username = username;
         User.password = password;
-        this.image = image;
+        User.image = image;
     }
 
     /**

@@ -8,11 +8,16 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Tests if {@link CredentialsValidator} works as expected.
+ *
+ * @author Elena Roncolino
  */
 public class CredentialsValidatorTest {
 
+    /**
+     * Tests whether incorrect usernames generate the right error message.
+     */
     @Test
-    public void TestInvalidUsername() {
+    public void testInvalidUsername() {
         String[] invalidUsername = new String[]{
                 "..",
                 "__",
@@ -29,8 +34,11 @@ public class CredentialsValidatorTest {
         }
     }
 
+    /**
+     * Tests if usernames and passwords are correctly checked according to the requirements.
+     */
     @Test
-    public void TestUsernameAndPassword() {
+    public void testUsernameAndPassword() {
         assertTrue(CredentialsValidator.checkPasswordRequirements("admin", "admin"));
         assertTrue(CredentialsValidator.checkPasswordRequirements("000000", "000000"));
         assertFalse(CredentialsValidator.checkMatchingPasswords("admin", "ad"));

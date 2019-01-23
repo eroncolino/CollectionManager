@@ -16,11 +16,16 @@ import static junit.framework.TestCase.*;
 
 /**
  * Tests if {@link main.SQLiteHandler} works as expected.
+ *
+ * @author Elena Roncolino
  */
 public class SQLiteHandlerTest {
 
+    /**
+     * Tests if database handler methods work correctly.
+     */
     @Test
-    public void SQLiteHandlerTest() {
+    public void sqliteHandlerTest() {
         String testFilename = "testDb";
 
         SQLiteHandler handler = new SQLiteHandler();
@@ -69,6 +74,5 @@ public class SQLiteHandlerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -3,8 +3,6 @@ package main;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static main.CarPanel.repaintTable;
@@ -29,12 +27,10 @@ public class FindListener implements ActionListener {
         String stringToBeMatched = CarPanel.textField.getText();
         Object[][] myData;
 
-        if (selectedColumn == "Show all") {
-            try {
-                repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-            } catch (SQLException e1) {
-                logger.log(Level.SEVERE, "Problem with the database", e);
-            }
+        if (selectedColumn.equals("Show all")) {
+
+            repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
+
             textField.setText("");
         } else {
             if (stringToBeMatched.length() != 0) {
@@ -42,20 +38,17 @@ public class FindListener implements ActionListener {
                 switch (selectedColumn) {
                     case "Name":
                         if (stringToBeMatched.length() < 50) {
-                            try {
-                                myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "name", stringToBeMatched);
-                                //If matches to the given string have been found, they are shown in the table. Otherwise all the data from the table are shown again
-                                if (myData.length != 0)
-                                    repaintTable(myData);
+                            myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "name", stringToBeMatched);
+                            //If matches to the given string have been found, they are shown in the table. Otherwise all the data from the table are shown again
+                            if (myData.length != 0)
+                                repaintTable(myData);
 
-                                else {
-                                    JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-                                    repaintTable(myData);
-                                }
-                            } catch (SQLException e1) {
-                                logger.log(Level.SEVERE, "Problem with the database", e);
+                            else {
+                                JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
+                                myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
+                                repaintTable(myData);
                             }
+
                         } else {
                             JOptionPane.showMessageDialog(null, "Car name must be shorter than 50 characters.", "Warning", JOptionPane.WARNING_MESSAGE);
                         }
@@ -63,19 +56,15 @@ public class FindListener implements ActionListener {
 
                     case "Brand":
                         if (stringToBeMatched.length() < 50) {
-                            try {
-                                myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "brand", stringToBeMatched);
+                            myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "brand", stringToBeMatched);
 
-                                if (myData.length != 0)
-                                    repaintTable(myData);
+                            if (myData.length != 0)
+                                repaintTable(myData);
 
-                                else {
-                                    JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-                                    repaintTable(myData);
-                                }
-                            } catch (SQLException e1) {
-                                e1.printStackTrace();
+                            else {
+                                JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
+                                myData = (DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
+                                repaintTable(myData);
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "Car brand must be shorter than 50 characters.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -97,8 +86,6 @@ public class FindListener implements ActionListener {
                             }
                         } catch (NumberFormatException n) {
                             JOptionPane.showMessageDialog(null, "Cubic capacity must be an integer.", "Warning", JOptionPane.WARNING_MESSAGE);
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
                         }
                         break;
 
@@ -117,8 +104,6 @@ public class FindListener implements ActionListener {
                             }
                         } catch (NumberFormatException n) {
                             JOptionPane.showMessageDialog(null, "PS must be an integer.", "Warning", JOptionPane.WARNING_MESSAGE);
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
                         }
                         break;
 
@@ -137,8 +122,6 @@ public class FindListener implements ActionListener {
                             }
                         } catch (NumberFormatException n) {
                             JOptionPane.showMessageDialog(null, "KW must be an integer.", "Warning", JOptionPane.WARNING_MESSAGE);
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
                         }
                         break;
 
@@ -157,8 +140,6 @@ public class FindListener implements ActionListener {
                             }
                         } catch (NumberFormatException n) {
                             JOptionPane.showMessageDialog(null, "Cylinders must be an integer.", "Warning", JOptionPane.WARNING_MESSAGE);
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
                         }
                         break;
 
@@ -167,20 +148,18 @@ public class FindListener implements ActionListener {
                                 stringToBeMatched.equalsIgnoreCase("gasoline") ||
                                 stringToBeMatched.equalsIgnoreCase("hybrid") ||
                                 stringToBeMatched.equalsIgnoreCase("electric")) {
-                            try {
-                                myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "fueltype", stringToBeMatched);
 
-                                if (myData.length != 0)
-                                    repaintTable(myData);
+                            myData = DatabaseConnection.getInstance().getCarsByString(User.getUserId(), "fueltype", stringToBeMatched);
 
-                                else {
-                                    JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
-                                    myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
-                                    repaintTable(myData);
-                                }
-                            } catch (SQLException e1) {
-                                e1.printStackTrace();
+                            if (myData.length != 0)
+                                repaintTable(myData);
+
+                            else {
+                                JOptionPane.showMessageDialog(null, "No results found for that query!", "Error", JOptionPane.ERROR_MESSAGE);
+                                myData = DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId());
+                                repaintTable(myData);
                             }
+
                         } else {
                             JOptionPane.showMessageDialog(null, "Fuel type can be diesel, gasoline,\n" +
                                     "hybrid or electric.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -190,7 +169,6 @@ public class FindListener implements ActionListener {
                 textField.setText("");
             } else
                 JOptionPane.showMessageDialog(null, "Enter the string to be found.", "Error", JOptionPane.ERROR_MESSAGE);
-
         }
     }
 }

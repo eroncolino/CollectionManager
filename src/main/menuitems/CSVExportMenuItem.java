@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +30,7 @@ public class CSVExportMenuItem extends JMenuItem {
      *
      * @return JMenuItem The CSV export menu item.
      */
-    public JMenuItem CSVExportMenuItem() {
+    public JMenuItem csvExportMenuItem() {
 
         ImageIcon csvImage = new ImageIcon(new ImageIcon("images/export.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         JMenuItem csvMenu = new JMenuItem("Export to CSV file", csvImage);
@@ -88,21 +87,18 @@ public class CSVExportMenuItem extends JMenuItem {
                 container.add(pathPanel);
                 container.add(Box.createRigidArea(new Dimension(0, 20)));
 
-                int result = JOptionPane.showConfirmDialog(null, container, "Choose export file", JOptionPane.YES_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, container, "Choose export file", JOptionPane.YES_NO_OPTION);
 
                 if (result == JOptionPane.YES_OPTION) {
                     if (chosenFile == null)
                         JOptionPane.showMessageDialog(null, "No file selected!", "Error", JOptionPane.ERROR_MESSAGE);
 
                     else {
-                        try {
-                            logger.log(Level.INFO, "Exporting CSV file");
-                            export(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()), chosenFilePath);
-                            JOptionPane.showMessageDialog(null, "CSV file generated successfully!", "File generated", JOptionPane.INFORMATION_MESSAGE);
-                            logger.log(Level.FINEST, "CSV file exported successfully");
-                        } catch (SQLException e1) {
-                            logger.log(Level.SEVERE, "Problem with the database");
-                        }
+
+                        logger.log(Level.INFO, "Exporting CSV file");
+                        export(DatabaseConnection.getInstance().getCarsByUserId(User.getUserId()), chosenFilePath);
+                        JOptionPane.showMessageDialog(null, "CSV file generated successfully!", "File generated", JOptionPane.INFORMATION_MESSAGE);
+                        logger.log(Level.FINEST, "CSV file exported successfully");
                     }
                 }
             }
@@ -143,10 +139,13 @@ public class CSVExportMenuItem extends JMenuItem {
             logger.log(Level.SEVERE, "Problem writing to file", e);
         } finally {
             try {
-                fileWriter.flush();
-                fileWriter.close();
+                if (fileWriter != null) {
+                    fileWriter.flush();
+                    fileWriter.close();
+                }
             } catch (IOException e) {
-                logger.log(Level.SEVERE, "Problem flushing/closing file writer", e);            }
+                logger.log(Level.SEVERE, "Problem flushing/closing file writer", e);
+            }
         }
 
 

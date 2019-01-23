@@ -120,7 +120,7 @@ public class UpdateListener implements ActionListener {
         JLabel fuelType = new JLabel("Fuel type");
         fuelType.setFont(new Font("Arial", Font.PLAIN, 18));
         String[] possibleFuels = {"Diesel", "Gasoline", "Hybrid", "Electric"};
-        JComboBox comboBox = new JComboBox(possibleFuels);
+        JComboBox<String> comboBox = new JComboBox<>(possibleFuels);
         String fuel = (String) CarPanel.tab.getModel().getValueAt(index, 7);
         switch (fuel) {
             case "Diesel":
@@ -207,16 +207,12 @@ public class UpdateListener implements ActionListener {
 
             int carId = (int) CarPanel.tab.getModel().getValueAt(index, 0);
 
-            try {
-                DatabaseConnection.getInstance().updateCar(carId, nameField.getText(), brandField.getText(),
-                        Integer.parseInt(cubicCapacityField.getText()),
-                        Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
-                        Integer.parseInt(cylindersField.getText()), selectedFuel);
+            DatabaseConnection.getInstance().updateCar(carId, nameField.getText(), brandField.getText(),
+                    Integer.parseInt(cubicCapacityField.getText()),
+                    Integer.parseInt(psField.getText()), Integer.parseInt(kwField.getText()),
+                    Integer.parseInt(cylindersField.getText()), selectedFuel);
 
-                CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
-            } catch (SQLException e1) {
-                logger.log(Level.SEVERE, "Problem with the database", e);
-            }
+            CarPanel.repaintTable(DatabaseConnection.getInstance().getCarsMatrixByUserId(User.getUserId()));
         }
     }
 }

@@ -1,7 +1,5 @@
 package main.menuitems;
 
-import main.DatabaseConnection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

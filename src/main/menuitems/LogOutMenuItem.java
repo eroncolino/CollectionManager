@@ -1,6 +1,5 @@
 package main.menuitems;
 
-import main.DatabaseConnection;
 import main.Main;
 
 import javax.swing.*;

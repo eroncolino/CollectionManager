@@ -2,7 +2,6 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.FileHandler;
@@ -16,7 +15,7 @@ import java.util.logging.SimpleFormatter;
  * @author Elena Roncolino
  */
 public class Main {
-    static JFrame frame;
+    private static JFrame frame;
     private static BackgroundPanel backgroundPanel;
     private static LoginPanel loginPanel;
     private static CarPanel carPanel;
@@ -44,13 +43,8 @@ public class Main {
         //Create the frame
         frame = new JFrame("AP Collection Manager 2017");
 
-        try {
-            logger.log(Level.INFO, "Logging started, connecting to the database");
-            DatabaseConnection.getInstance().initialize("CarDB.db");
-
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Problems connecting to the database", e);
-        }
+        logger.log(Level.INFO, "Logging started, connecting to the database");
+        DatabaseConnection.getInstance().initialize("CarDB.db");
 
         backgroundPanel = new BackgroundPanel();
         frame.add(backgroundPanel);
